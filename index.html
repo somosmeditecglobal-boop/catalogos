@@ -469,10 +469,11 @@ const home = document.getElementById('home'), viewer = document.getElementById('
 const pagesEl = document.getElementById('pages'), statusEl = document.getElementById('status');
 let current = null, token = 0, lastScroll = 0;
 
+function jump(y){ window.scrollTo({ top: y, behavior: 'instant' }); }
 function goPage(n){
   const el = n && pagesEl.querySelector('.pg[data-p="' + n + '"]');
-  if (el) { const y = el.getBoundingClientRect().top + window.scrollY - 150; window.scrollTo(0, y); }
-  else window.scrollTo(0, 0);
+  if (el) { const y = el.getBoundingClientRect().top + window.scrollY - 150; jump(y); }
+  else jump(0);
 }
 async function openCat(key, page){
   const cat = CATS[key]; if (!cat) return showHome();
@@ -482,7 +483,7 @@ async function openCat(key, page){
   document.getElementById('vpdf').href = cat.file;
   if (current === key) { goPage(page); return; }
   current = key; const my = ++token;
-  pagesEl.innerHTML = ''; statusEl.hidden = false; statusEl.textContent = 'Cargando catálogo…'; window.scrollTo(0, 0);
+  pagesEl.innerHTML = ''; statusEl.hidden = false; statusEl.textContent = 'Cargando catálogo…'; jump(0);
   try {
     await libReady();
     const pdf = await pdfjsLib.getDocument({ url: cat.file }).promise;
@@ -522,7 +523,7 @@ function showHome(target){
   const wasViewer = !viewer.hidden;
   viewer.hidden = true; home.hidden = false;
   if (target) { const el = document.getElementById(target); if (el) el.scrollIntoView(); }
-  else if (wasViewer) window.scrollTo(0, lastScroll);
+  else if (wasViewer) jump(lastScroll);
 }
 function route(){
   const h = location.hash.replace('#', ''); const [key, pg] = h.split('/');
