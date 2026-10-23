@@ -202,6 +202,32 @@ footer .legal .wrap{display:flex;justify-content:space-between;gap:12px;flex-wra
   footer .wrap{grid-template-columns:1fr}
   .stat b{font-size:26px}
 }
+
+/* fondos con imagen y textura de instrumental */
+body{background:#F4F8FB}
+section.block{background-color:#F7FAFC;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='%230A2540' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' opacity='.07'%3E%3Ccircle cx='30' cy='40' r='7'/%3E%3Ccircle cx='30' cy='62' r='7'/%3E%3Cpath d='M36 44 78 70M36 58 78 32'/%3E%3Cpath d='M120 30h46l14 6-14 6h-46z'/%3E%3Cpath d='M120 36h-26'/%3E%3Cpath d='M150 120l50 30M150 132l50 18'/%3E%3Ccircle cx='143' cy='117' r='6'/%3E%3Ccircle cx='143' cy='135' r='6'/%3E%3Cpath d='M40 120v26a20 20 0 0 0 40 0v-26M80 146v20a16 16 0 0 0 32 0v-8'/%3E%3Ccircle cx='112' cy='152' r='6'/%3E%3Cpath d='M180 190h16M188 182v16M20 196h12M26 190v12'/%3E%3C/g%3E%3C/svg%3E")}
+section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='%230A2540' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' opacity='.07'%3E%3Ccircle cx='30' cy='40' r='7'/%3E%3Ccircle cx='30' cy='62' r='7'/%3E%3Cpath d='M36 44 78 70M36 58 78 32'/%3E%3Cpath d='M120 30h46l14 6-14 6h-46z'/%3E%3Cpath d='M120 36h-26'/%3E%3Cpath d='M150 120l50 30M150 132l50 18'/%3E%3Ccircle cx='143' cy='117' r='6'/%3E%3Ccircle cx='143' cy='135' r='6'/%3E%3Cpath d='M40 120v26a20 20 0 0 0 40 0v-26M80 146v20a16 16 0 0 0 32 0v-8'/%3E%3Ccircle cx='112' cy='152' r='6'/%3E%3Cpath d='M180 190h16M188 182v16M20 196h12M26 190v12'/%3E%3C/g%3E%3C/svg%3E")}
+.hero{position:relative;background:var(--navy);isolation:isolate}
+.hero .mosaic{position:absolute;inset:0;z-index:-2;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(2,1fr);gap:2px;opacity:.28}
+.hero .mosaic img{width:100%;height:100%;object-fit:cover;filter:grayscale(.35)}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(100deg,rgba(10,37,64,.97) 0%,rgba(10,37,64,.9) 42%,rgba(10,37,64,.62) 100%)}
+.hero h1{color:#fff}.hero h1 em{color:#6FD3CE}
+.hero .eyebrow{color:#6FD3CE}.hero .lead{color:#C9D7E6}
+.hero .btn-ghost{color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.45)}.hero .btn-ghost:hover{box-shadow:inset 0 0 0 1.5px #fff}
+.hero .chips li{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);color:#fff}
+.hero .chips svg{color:#6FD3CE}
+/* marcas */
+.brands{background:#fff;border-bottom:1px solid var(--line)}
+.brands .wrap{display:flex;align-items:center;gap:28px;padding-block:22px}
+.brands .lbl{flex:none;font-family:var(--display);font-weight:700;color:var(--ink);font-size:15px;line-height:1.25;max-width:150px}
+.brands .lbl small{display:block;font-family:var(--body);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.marquee{overflow:hidden;flex:1;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.track{display:flex;gap:14px;width:max-content;animation:slide 40s linear infinite}
+.marquee:hover .track{animation-play-state:paused}
+.track span{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:.04em;color:var(--navy);background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:12px 22px;white-space:nowrap}
+@keyframes slide{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){ .track{animation:none;flex-wrap:wrap;width:auto} .track [aria-hidden]{display:none} }
+@media (max-width:860px){ .brands .wrap{flex-direction:column;align-items:flex-start;gap:14px} .brands .lbl{max-width:none} .marquee{width:100%} .hero .mosaic{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr)} }
 </style>
 <script type="application/ld+json">
 {
@@ -273,6 +299,7 @@ footer .legal .wrap{display:flex;justify-content:space-between;gap:12px;flex-wra
 
 <div id="home">
   <section class="hero" id="inicio">
+    <div class="mosaic" aria-hidden="true"><img src="catalogos/linea-monitoreo.webp" alt="" width="480" height="360" fetchpriority="low"><img src="catalogos/linea-instrumental.webp" alt="" width="480" height="360" fetchpriority="low"><img src="catalogos/linea-ultrasonido.webp" alt="" width="480" height="360" fetchpriority="low"><img src="catalogos/linea-quirofano.webp" alt="" width="480" height="360" fetchpriority="low"><img src="catalogos/linea-descartable.webp" alt="" width="480" height="360" fetchpriority="low"><img src="catalogos/linea-gases.webp" alt="" width="480" height="360" fetchpriority="low"><img src="catalogos/linea-diagnostico.webp" alt="" width="480" height="360" fetchpriority="low"><img src="catalogos/linea-mobiliario.webp" alt="" width="480" height="360" fetchpriority="low"><img src="catalogos/linea-emergencia.webp" alt="" width="480" height="360" fetchpriority="low"><img src="catalogos/linea-ortopedia.webp" alt="" width="480" height="360" fetchpriority="low"></div>
     <div class="wrap">
       <div>
         <div class="eyebrow">Proveedor de insumos médicos · Caracas, Venezuela</div>
@@ -304,6 +331,13 @@ footer .legal .wrap{display:flex;justify-content:space-between;gap:12px;flex-wra
       <div class="stat"><b>6 años</b><span>de garantía en instrumental</span></div>
     </div>
   </div>
+
+  <section class="brands" aria-label="Marcas que distribuimos">
+    <div class="wrap">
+      <div class="lbl"><small>Marcas</small>Trabajamos con marcas líderes</div>
+      <div class="marquee"><div class="track"><span>Mindray</span><span>Contec</span><span>Comen</span><span>EDAN</span><span>Riester</span><span>Aesculap</span><span>Midmark</span><span>Dynarex</span><span>Bioland</span><span>Sinohero</span><span>Instramed</span><span>Venttech</span><span>Drive Medical</span><span>Western Medical</span><span aria-hidden="true" style="display:contents"><span>Mindray</span><span>Contec</span><span>Comen</span><span>EDAN</span><span>Riester</span><span>Aesculap</span><span>Midmark</span><span>Dynarex</span><span>Bioland</span><span>Sinohero</span><span>Instramed</span><span>Venttech</span><span>Drive Medical</span><span>Western Medical</span></span></div></div>
+    </div>
+  </section>
 
   <section class="block" id="catalogos">
     <div class="wrap">
