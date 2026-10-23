@@ -58,7 +58,14 @@ h1,h2,h3{font-family:var(--display);color:var(--ink);margin:0;line-height:1.15;t
 .topbar{background:var(--navy);color:#C9D7E6;font-size:13px}
 .topbar .wrap{display:flex;justify-content:space-between;gap:16px;padding-block:8px;flex-wrap:wrap}
 .topbar a{text-decoration:none}.topbar a:hover{color:#fff}
-.topbar .group{display:flex;gap:18px;flex-wrap:wrap}
+.topbar .group{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+.topbar .tasa{background:rgba(111,211,206,.14);color:#fff;border:1px solid rgba(111,211,206,.5);border-radius:999px;padding:2px 12px;font-weight:600}
+.topbar .tasa b{color:#6FD3CE;font-weight:800}
+.topbar .tasa[hidden]{display:none}
+footer .hours{margin-top:18px}
+footer .hours h4{margin-bottom:6px}
+footer .hours p{margin:0;line-height:1.6}
+footer .hours b{color:#fff;font-weight:600}
 
 /* menú */
 .nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid var(--line)}
@@ -371,7 +378,7 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
 
 <div class="topbar">
   <div class="wrap">
-    <div class="group"><span>MEDITEC GLOBAL, C.A. · RIF J-50442457-9</span><span class="hide-s">La California Norte, Caracas</span></div>
+    <div class="group"><span>MEDITEC GLOBAL, C.A. · RIF J-50442457-9</span><span class="hide-s">La California Norte, Caracas</span><span class="tasa" id="tasabcv" hidden></span></div>
     <div class="group"><a href="https://wa.me/584128761693" target="_blank" rel="noopener">WhatsApp 0412-876.16.93</a><a class="hide-s" href="mailto:info@meditecglobalve.com">info@meditecglobalve.com</a><a href="https://www.instagram.com/meditecglobal/" target="_blank" rel="noopener">@meditecglobal</a></div>
   </div>
 </div>
@@ -567,6 +574,7 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
     <div class="about">
       <a class="logo" href="#inicio"><svg style="color:#fff"><use href="#i-mark"/></svg><div><b>MEDITEC</b><small>GLOBAL</small></div></a>
       <p>Instrumental quirúrgico alemán y equipamiento médico para clínicas, consultorios y quirófanos de Venezuela.</p>
+      <div class="hours"><h4>Horario de atención</h4><p><b>Lunes a viernes:</b><br>8:00&nbsp;a.&nbsp;m.&nbsp;a&nbsp;12:00&nbsp;m. y 1:00&nbsp;p.&nbsp;m.&nbsp;a&nbsp;5:00&nbsp;p.&nbsp;m.<br><b>Sábados:</b> 8:00&nbsp;a.&nbsp;m.&nbsp;a&nbsp;3:00&nbsp;p.&nbsp;m.</p></div>
     </div>
     <div>
       <h4>Catálogos</h4>
@@ -689,6 +697,7 @@ route();
   window.MGP=window.MGP||fetch('catalogos/precios.json',{cache:'no-cache'}).then(r=>r.ok?r.json():{p:{}}).catch(()=>({p:{}}));
   window.MGnum=x=>{const s=(Math.round(x*100)/100).toFixed(2).split('.');return s[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.')+','+s[1];};
   window.MGfmt=x=>'Bs '+MGnum(x);
+  window.MGP.then(d=>{ const t=document.getElementById('tasabcv'); if(!t||!d||!(d.bcv>0)) return; const s=d.bcv.toFixed(4).split('.'); t.innerHTML='Dólar BCV'+(d.fecha?' '+d.fecha:'')+': <b>Bs '+s[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.')+','+s[1]+'</b>'; t.title='Tasa oficial del Banco Central de Venezuela usada como referencia para los pagos en bolívares'; t.hidden=false; });
   let PR={p:{}};
   const q=document.getElementById('q'), out=document.getElementById('fout'), qx=document.getElementById('qx');
   let data=null, loading=null;
