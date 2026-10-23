@@ -260,6 +260,44 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
 .fcount{font-size:12.5px;color:var(--muted);margin:10px 2px 0}
 @media (max-width:860px){ .finder .wrap{grid-template-columns:1fr;gap:20px} .fres .q span{display:none} }
 @media (max-width:560px){ .fres li{flex-wrap:wrap} .fres .nm{flex-basis:100%} }
+
+/* carrito de pedido */
+.fres .add{flex:none;font:700 13px var(--body);color:#fff;background:var(--accent);border:0;border-radius:999px;padding:8px 14px;cursor:pointer}
+.fres .add:hover{background:var(--accent-d)}
+.fres .add.in{background:var(--accent-soft);color:var(--accent-d)}
+.cartbtn{position:fixed;left:max(20px,env(safe-area-inset-left,0px));bottom:max(20px,env(safe-area-inset-bottom,0px));z-index:31;display:flex;align-items:center;gap:8px;background:var(--navy);color:#fff;border:0;border-radius:999px;padding:14px 20px;font:700 15px var(--body);box-shadow:0 10px 24px -6px rgba(0,0,0,.4);cursor:pointer}
+.cartbtn svg{width:20px;height:20px}
+.cartbtn b{background:#6FD3CE;color:var(--navy);border-radius:999px;min-width:24px;height:24px;display:grid;place-items:center;font-size:13px;padding:0 6px}
+.cart-ov{position:fixed;inset:0;background:rgba(7,23,43,.5);z-index:40}
+.cart{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:#fff;z-index:41;display:flex;flex-direction:column;box-shadow:-12px 0 32px rgba(0,0,0,.25)}
+.cart-h{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line)}
+.cart-h h3{font-size:20px}
+.cart-x{border:0;background:var(--soft);border-radius:10px;width:38px;height:38px;font-size:20px;cursor:pointer;color:var(--ink)}
+.cart-b{flex:1;overflow:auto;padding:16px 20px}
+.cart-empty{color:var(--muted);text-align:center;padding:40px 10px}
+.ci{display:grid;grid-template-columns:1fr auto;gap:6px 10px;border-bottom:1px solid var(--line);padding:12px 0}
+.ci .nm{font-weight:600;color:var(--ink);font-size:14.5px;line-height:1.3}
+.ci .cd{font-size:12.5px;color:var(--muted)}
+.ci .ctl{display:flex;align-items:center;gap:6px}
+.ci .ctl button{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:#fff;font:700 16px var(--body);cursor:pointer;color:var(--ink)}
+.ci .ctl input{width:46px;height:32px;text-align:center;border:1px solid var(--line);border-radius:8px;font:600 15px var(--body);color:var(--ink)}
+.ci .rm{grid-column:2;justify-self:end;border:0;background:none;color:#B42318;font:600 12.5px var(--body);cursor:pointer;padding:0}
+.cart-f{border-top:1px solid var(--line);padding:16px 20px;display:grid;grid-template-columns:minmax(0,1fr);gap:10px;background:var(--soft)}
+.cart-f label,.cart-f .two>*{min-width:0}
+.cart-f input{width:100%;min-width:0;box-sizing:border-box}
+.cart-f label{font-size:12.5px;font-weight:600;color:var(--muted);display:grid;gap:4px}
+.cart-f input{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:500 15px var(--body);color:var(--ink);background:#fff}
+.cart-f .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cart-f .tot{display:flex;justify-content:space-between;font-weight:700;color:var(--ink)}
+.cart-f .nt{font-size:12.5px;color:var(--muted);margin:0}
+.cart-f .btn{width:100%}
+.cart-f .clr{border:0;background:none;color:var(--muted);font:600 13px var(--body);cursor:pointer;text-decoration:underline}
+.cart-ok{padding:6px 0 0}
+.cart-ok .badge{display:inline-block;background:#E3F5EA;color:#127A42;font-weight:700;border-radius:999px;padding:5px 12px;font-size:13px}
+.cart-ok h4{font-family:var(--display);color:var(--ink);font-size:19px;margin:12px 0 4px}
+.cart-ok ol{padding-left:20px;margin:10px 0;color:var(--text);font-size:14.5px;line-height:1.5}
+.cart-ok p{color:var(--muted);font-size:14px;margin:8px 0}
+@media (max-width:560px){ .cartbtn{padding:12px 16px;font-size:14px} .cart-f .two{grid-template-columns:1fr} }
 </style>
 <script type="application/ld+json">
 {
@@ -377,7 +415,7 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
       <div>
         <div class="eyebrow">Buscador de instrumental</div>
         <h2 id="buscar-t">Consulte aquí el instrumental que necesita</h2>
-        <p class="sub">Escriba el nombre de la caja, pinza, tijera o instrumento, o su código. Le indicamos al instante si lo tenemos disponible y puede cotizarlo por WhatsApp.</p>
+        <p class="sub">Escriba el nombre de la caja, pinza, tijera o instrumento, o su código. Le indicamos al instante si lo tenemos disponible. Agregue a su pedido todo lo que necesite y envíelo por WhatsApp: le respondemos con el monto total.</p>
       </div>
       <div class="fbox">
         <label class="fin" for="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
@@ -540,6 +578,13 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
   <div class="legal"><div class="wrap"><span>© 2026 MEDITEC GLOBAL, C.A. · RIF J-50442457-9</span><span>www.meditecglobalve.com</span></div></div>
 </footer>
 
+<button class="cartbtn" id="cartbtn" type="button" hidden aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>Mi pedido <b id="cartn">0</b></button>
+<div class="cart-ov" id="cartov" hidden></div>
+<aside class="cart" id="cart" hidden role="dialog" aria-modal="true" aria-labelledby="cart-t">
+  <div class="cart-h"><h3 id="cart-t">Mi pedido</h3><button class="cart-x" id="cartx" type="button" aria-label="Cerrar">×</button></div>
+  <div class="cart-b" id="cartb"></div>
+  <div class="cart-f" id="cartf"></div>
+</aside>
 <a class="fab" href="https://wa.me/584128761693?text=Hola%20Meditec%20Global%2C%20quiero%20una%20cotizaci%C3%B3n." target="_blank" rel="noopener" aria-label="Escribir por WhatsApp"><svg><use href="#i-wa"/></svg></a>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js" defer></script>
@@ -639,13 +684,68 @@ route();
     const top=res.slice(0,25);
     out.innerHTML='<p class="fcount">'+res.length+(res.length===1?' resultado':' resultados')+(res.length>25?' · mostrando los primeros 25, afine su búsqueda':'')+'</p><ul class="fres">'+top.map(p=>{
       const nm=cap(p.n); const msg=encodeURIComponent('Hola Meditec Global, quiero cotizar: '+nm+' (cód. '+p.c+').');
-      return '<li><div class="nm">'+esc(nm)+'<span class="cd">Código '+esc(p.c)+'</span></div><span class="ok">✓ Disponible</span><a class="q" target="_blank" rel="noopener" href="'+WA+msg+'">Cotizar<span> por WhatsApp</span></a></li>';
+      return '<li><div class="nm">'+esc(nm)+'<span class="cd">Código '+esc(p.c)+'</span></div><span class="ok">✓ Disponible</span><button type="button" class="add" data-c="'+esc(p.c)+'" data-n="'+esc(nm)+'">+ Agregar</button></li>';
     }).join('')+'</ul>';
+    if(window.MGsync) MGsync();
   }
   let tmr; q.addEventListener('input',()=>{ clearTimeout(tmr); tmr=setTimeout(()=>load().then(()=>render(q.value)).catch(()=>{out.innerHTML='<div class="fnone">No se pudo cargar el listado. Escríbanos por WhatsApp al 0412-876.16.93.</div>';}),120); });
   q.addEventListener('focus',()=>{load().catch(()=>{});},{once:true});
   qx.addEventListener('click',()=>{ q.value=''; render(''); q.focus(); });
   document.querySelectorAll('.fhint b[data-q]').forEach(b=>b.addEventListener('click',()=>{ q.value=b.dataset.q; load().then(()=>render(q.value)); }));
+})();
+</script>
+<script>
+(function(){
+  const PHONE='584128761693', KEY='mg_pedido';
+  const $=id=>document.getElementById(id);
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let cart=[]; try{ cart=JSON.parse(localStorage.getItem(KEY)||'[]')||[]; }catch(e){ cart=[]; }
+  let done=null;
+  const save=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(cart)); }catch(e){} };
+  const count=()=>cart.reduce((s,i)=>s+i.q,0);
+  function sync(){
+    const n=count(); $('cartn').textContent=n; $('cartbtn').hidden=n===0 && !done;
+    document.querySelectorAll('.fres .add').forEach(b=>{ const it=cart.find(i=>i.c===b.dataset.c); b.classList.toggle('in',!!it); b.textContent=it?('✓ En pedido ('+it.q+')'):'+ Agregar'; });
+  }
+  window.MGsync=sync;
+  function add(c,n){ const it=cart.find(i=>i.c===c); if(it) it.q++; else cart.push({c,n,q:1}); done=null; save(); sync(); }
+  document.addEventListener('click',e=>{ const b=e.target.closest('.fres .add'); if(b){ add(b.dataset.c,b.dataset.n); } });
+  function open(){ $('cart').hidden=false; $('cartov').hidden=false; draw(); document.body.style.overflow='hidden'; $('cartx').focus(); }
+  function close(){ $('cart').hidden=true; $('cartov').hidden=true; document.body.style.overflow=''; }
+  $('cartbtn').addEventListener('click',open); $('cartx').addEventListener('click',close); $('cartov').addEventListener('click',close);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && !$('cart').hidden) close(); });
+  function orderId(){ const d=new Date(), p=x=>String(x).padStart(2,'0'); return 'MG-'+String(d.getFullYear()).slice(2)+p(d.getMonth()+1)+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes())+String(Math.floor(Math.random()*90+10)); }
+  function draw(){
+    const b=$('cartb'), f=$('cartf');
+    if(done){
+      b.innerHTML='<div class="cart-ok"><span class="badge">✓ Pedido listo</span><h4>Su pedido '+esc(done.id)+'</h4><ol>'+done.items.map(i=>'<li>'+i.q+' × '+esc(i.n)+' <span style="color:var(--muted)">(cód. '+esc(i.c)+')</span></li>').join('')+'</ol><p>Se abrió WhatsApp con su pedido. <b>Pulse “Enviar”</b> en WhatsApp para que nos llegue. Le responderemos con el <b>monto total</b> y la disponibilidad.</p><p>¿No se abrió WhatsApp?</p></div>';
+      f.innerHTML='<a class="btn btn-wa" target="_blank" rel="noopener" href="'+done.url+'">Abrir WhatsApp de nuevo</a><button class="clr" type="button" id="cnew">Hacer un pedido nuevo</button>';
+      $('cnew').onclick=()=>{ done=null; cart=[]; save(); sync(); draw(); };
+      return;
+    }
+    if(!cart.length){ b.innerHTML='<div class="cart-empty">Su pedido está vacío.<br>Use el buscador para agregar instrumental.</div>'; f.innerHTML='<a class="btn btn-pri" href="#buscar" id="cgo">Ir al buscador</a>'; $('cgo').onclick=close; return; }
+    b.innerHTML=cart.map((i,k)=>'<div class="ci"><div><div class="nm">'+esc(i.n)+'</div><div class="cd">Código '+esc(i.c)+'</div></div><div class="ctl"><button type="button" data-k="'+k+'" data-d="-1" aria-label="Menos">−</button><input inputmode="numeric" aria-label="Cantidad" data-k="'+k+'" value="'+i.q+'"><button type="button" data-k="'+k+'" data-d="1" aria-label="Más">+</button></div><button class="rm" type="button" data-r="'+k+'">Quitar</button></div>').join('');
+    b.querySelectorAll('.ctl button').forEach(x=>x.onclick=()=>{ const i=cart[+x.dataset.k]; i.q=Math.max(1,i.q+(+x.dataset.d)); save(); sync(); draw(); });
+    b.querySelectorAll('.ctl input').forEach(x=>x.onchange=()=>{ const v=parseInt(x.value,10); cart[+x.dataset.k].q=v>0?Math.min(v,999):1; save(); sync(); draw(); });
+    b.querySelectorAll('.rm').forEach(x=>x.onclick=()=>{ cart.splice(+x.dataset.r,1); save(); sync(); draw(); });
+    let who={}; try{ who=JSON.parse(localStorage.getItem(KEY+'_c')||'{}'); }catch(e){}
+    f.innerHTML='<div class="tot"><span>Artículos</span><span>'+count()+'</span></div><div class="two"><label>Nombre<input id="cn" autocomplete="name" value="'+esc(who.n||'')+'"></label><label>Clínica / empresa<input id="ce" autocomplete="organization" value="'+esc(who.e||'')+'"></label></div><label>Ciudad<input id="cc" autocomplete="address-level2" value="'+esc(who.c||'')+'"></label><p class="nt">Le enviaremos por WhatsApp el monto total y la disponibilidad de su pedido.</p><button class="btn btn-wa" type="button" id="csend">Enviar pedido por WhatsApp</button><button class="clr" type="button" id="cclr">Vaciar pedido</button>';
+    $('cclr').onclick=()=>{ cart=[]; save(); sync(); draw(); };
+    $('csend').onclick=()=>{
+      const n=$('cn').value.trim(), e=$('ce').value.trim(), c=$('cc').value.trim();
+      try{ localStorage.setItem(KEY+'_c',JSON.stringify({n,e,c})); }catch(_){}
+      const id=orderId();
+      const lines=['*Nuevo pedido web – '+id+'*'];
+      if(n) lines.push('Nombre: '+n); if(e) lines.push('Clínica/empresa: '+e); if(c) lines.push('Ciudad: '+c);
+      lines.push(''); cart.forEach((i,k)=>lines.push((k+1)+') '+i.q+' × '+i.n+' (cód. '+i.c+')'));
+      lines.push('','Total de artículos: '+count(),'Por favor, envíenme el monto total y la disponibilidad. Gracias.');
+      const url='https://wa.me/'+PHONE+'?text='+encodeURIComponent(lines.join('\n'));
+      done={id,items:cart.map(i=>({...i})),url}; draw(); sync();
+      window.open(url,'_blank','noopener');
+      if(window.gtag) try{ gtag('event','pedido_whatsapp',{items:count()}); }catch(_){}
+    };
+  }
+  sync();
 })();
 </script>
 </body>
