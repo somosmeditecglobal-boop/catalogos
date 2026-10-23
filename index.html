@@ -168,6 +168,9 @@ footer a{text-decoration:none}footer a:hover{color:#fff}
 footer .logo b{color:#fff}
 footer .about p{margin:14px 0 0;max-width:36ch}
 footer .legal{border-top:1px solid rgba(255,255,255,.12)}
+footer .legal-links{display:flex;gap:6px 18px;flex-wrap:wrap}
+footer .legal-links a{color:#C9D7E6;text-decoration:underline;text-underline-offset:3px}
+footer .legal .note{padding-top:0;padding-bottom:88px;font-size:12px;color:#8DA2BA}
 footer .legal .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:18px;font-size:13px;grid-template-columns:none}
 
 /* WhatsApp flotante */
@@ -321,6 +324,7 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
 .fres .pz{flex:none;text-align:right;line-height:1.15}
 .fres .pz b{display:block;font:800 16.5px var(--display);color:var(--navy);white-space:nowrap}
 .fres .pz small{font-size:11px;color:var(--muted);font-weight:600}
+.fres .pz small.ti{display:block;color:var(--text);font-weight:700;margin-top:1px}
 .fres .pz.na{font-size:12.5px;font-weight:700;color:var(--muted);max-width:92px}
 .fres .cd em{font-style:normal;color:#127A42;font-weight:700}
 .fnote{font-size:12px;color:var(--muted);margin:10px 2px 0;line-height:1.45}
@@ -607,11 +611,11 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
         <li><a href="https://wa.me/584128761693" target="_blank" rel="noopener">WhatsApp 0412-876.16.93</a></li>
         <li><a href="mailto:info@meditecglobalve.com">info@meditecglobalve.com</a></li>
         <li><a href="https://www.instagram.com/meditecglobal/" target="_blank" rel="noopener">Instagram @meditecglobal</a></li>
-        <li>La California Norte, Caracas</li>
+        <li>Av. Francisco de Miranda, La California Norte, Edif. Torre D, Piso 4, Ofic. P4-E5, Caracas</li>
       </ul>
     </div>
   </div>
-  <div class="legal"><div class="wrap"><span>© 2026 MEDITEC GLOBAL, C.A. · RIF J-50442457-9 · Todos los derechos reservados.</span><span>www.meditecglobalve.com</span></div></div>
+  <div class="legal"><div class="wrap"><span>© 2026 MEDITEC GLOBAL, C.A. · RIF J-50442457-9 · Todos los derechos reservados.</span><nav class="legal-links" aria-label="Información legal"><a href="legal.html#terminos">Términos y condiciones</a><a href="legal.html#privacidad">Política de privacidad</a><a href="legal.html#garantia">Envíos, garantía y devoluciones</a><a href="legal.html#reclamos">Reclamos</a></nav></div><div class="wrap note"><span>Las marcas y logotipos de terceros mencionados en este sitio pertenecen a sus respectivos titulares y se citan solo para identificar los productos que comercializamos.</span><span>www.meditecglobalve.com</span></div></div>
 </footer>
 
 <button class="cartbtn" id="cartbtn" type="button" hidden aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>Mi carrito <b id="cartn">0</b></button>
@@ -725,7 +729,7 @@ route();
     const top=res.slice(0,25);
     out.innerHTML='<p class="fcount">'+res.length+(res.length===1?' resultado':' resultados')+(res.length>25?' · mostrando los primeros 25, afine su búsqueda':'')+'</p><ul class="fres">'+top.map(p=>{
       const nm=cap(p.n); const msg=encodeURIComponent('Hola Meditec Global, quiero cotizar: '+nm+' (cód. '+p.c+').');
-      const v=(PR.p&&PR.p[p.c]>0&&PR.bcv)?Math.round(PR.p[p.c]*PR.bcv*100)/100:0; const pz=v>0?'<span class="pz"><b>'+MGfmt(v)+'</b><small>por unidad + IVA</small></span>':'<span class="pz na">Precio a consultar</span>';
+      const v=(PR.p&&PR.p[p.c]>0&&PR.bcv)?Math.round(PR.p[p.c]*PR.bcv*100)/100:0; const pz=v>0?'<span class="pz"><b>'+MGfmt(v)+'</b><small>por unidad + IVA</small><small class="ti">Total con IVA: '+MGfmt(Math.round(v*(100+(PR.iva!=null?PR.iva:16)))/100)+'</small></span>':'<span class="pz na">Precio a consultar</span>';
       return '<li><div class="nm">'+esc(nm)+'<span class="cd">Código '+esc(p.c)+' · <em>✓ Disponible</em></span></div>'+pz+'<button type="button" class="add" data-c="'+esc(p.c)+'" data-n="'+esc(nm)+'">+ Agregar al carrito</button></li>';
     }).join('')+'</ul>'+(PR.fecha?'<p class="fnote">Precios por unidad expresados en bolívares, calculados a la tasa oficial del BCV del '+esc(PR.fecha)+', sin IVA. Se actualizan a diario según la tasa oficial del BCV.</p>':'');
     if(window.MGsync) MGsync();
@@ -770,13 +774,13 @@ route();
       return;
     }
     if(!cart.length){ b.innerHTML='<div class="cart-empty">Su carrito está vacío.<br>Use el buscador para agregar instrumental.</div>'; f.innerHTML='<a class="btn btn-pri" href="#buscar" id="cgo">Ir al buscador</a>'; $('cgo').onclick=close; return; }
-    b.innerHTML=cart.map((i,k)=>'<div class="ci"><div><div class="nm">'+esc(i.n)+'</div><div class="cd">Código '+esc(i.c)+'</div><div class="pr">'+(pv(i.c)?fmt(pv(i.c))+' por unidad + IVA':'Precio a consultar')+'</div></div><div class="ctl"><button type="button" data-k="'+k+'" data-d="-1" aria-label="Menos">−</button><input inputmode="numeric" aria-label="Cantidad" data-k="'+k+'" value="'+i.q+'"><button type="button" data-k="'+k+'" data-d="1" aria-label="Más">+</button></div><div class="lt">'+(pv(i.c)?fmt(pv(i.c)*i.q):'')+'</div><button class="rm" type="button" data-r="'+k+'">Quitar</button></div>').join('');
+    b.innerHTML=cart.map((i,k)=>'<div class="ci"><div><div class="nm">'+esc(i.n)+'</div><div class="cd">Código '+esc(i.c)+'</div><div class="pr">'+(pv(i.c)?fmt(pv(i.c))+' por unidad + IVA · '+fmt(Math.round(pv(i.c)*(100+(PR.iva!=null?PR.iva:16)))/100)+' con IVA':'Precio a consultar')+'</div></div><div class="ctl"><button type="button" data-k="'+k+'" data-d="-1" aria-label="Menos">−</button><input inputmode="numeric" aria-label="Cantidad" data-k="'+k+'" value="'+i.q+'"><button type="button" data-k="'+k+'" data-d="1" aria-label="Más">+</button></div><div class="lt">'+(pv(i.c)?fmt(pv(i.c)*i.q):'')+'</div><button class="rm" type="button" data-r="'+k+'">Quitar</button></div>').join('');
     b.querySelectorAll('.ctl button').forEach(x=>x.onclick=()=>{ const i=cart[+x.dataset.k]; i.q=Math.max(1,i.q+(+x.dataset.d)); save(); sync(); draw(); });
     b.querySelectorAll('.ctl input').forEach(x=>x.onchange=()=>{ const v=parseInt(x.value,10); cart[+x.dataset.k].q=v>0?Math.min(v,999):1; save(); sync(); draw(); });
     b.querySelectorAll('.rm').forEach(x=>x.onclick=()=>{ cart.splice(+x.dataset.r,1); save(); sync(); draw(); });
     let who={}; try{ who=JSON.parse(localStorage.getItem(KEY+'_c')||'{}'); }catch(e){}
     const T=totals();
-    f.innerHTML='<div class="sum"><div><span>Artículos</span><span>'+count()+'</span></div><div><span>Subtotal</span><span>'+fmt(T.s)+'</span></div><div><span>IVA ('+T.iva+'%)</span><span>'+fmt(T.iv)+'</span></div><div class="tt"><span>Total</span><span>'+fmt(T.t)+'</span></div>'+(T.bs?'<div class="bs"><span>Equivale a (tasa BCV '+esc(PR.fecha||'')+')</span><span>Bs '+(window.MGnum?MGnum(T.bs):T.bs.toFixed(2))+'</span></div>':'')+'</div>'+(T.na?'<p class="nt">'+T.na+' artículo(s) con precio a consultar no están incluidos en el total.</p>':'')+'<div class="two"><label>Nombre<input id="cn" autocomplete="name" value="'+esc(who.n||'')+'"></label><label>Clínica / empresa<input id="ce" autocomplete="organization" value="'+esc(who.e||'')+'"></label></div><label>Ciudad<input id="cc" autocomplete="address-level2" value="'+esc(who.c||'')+'"></label><p class="nt">Precios en bolívares a la tasa oficial del BCV'+(PR.fecha?' del '+esc(PR.fecha):'')+'. El monto final se confirma con la tasa oficial del BCV del día del pago.</p><button class="btn btn-wa" type="button" id="csend">Enviar pedido por WhatsApp</button><button class="clr" type="button" id="cclr">Vaciar pedido</button>';
+    f.innerHTML='<div class="sum"><div><span>Artículos</span><span>'+count()+'</span></div><div><span>Subtotal</span><span>'+fmt(T.s)+'</span></div><div><span>IVA ('+T.iva+'%)</span><span>'+fmt(T.iv)+'</span></div><div class="tt"><span>Total</span><span>'+fmt(T.t)+'</span></div>'+(T.bs?'<div class="bs"><span>Equivale a (tasa BCV '+esc(PR.fecha||'')+')</span><span>Bs '+(window.MGnum?MGnum(T.bs):T.bs.toFixed(2))+'</span></div>':'')+'</div>'+(T.na?'<p class="nt">'+T.na+' artículo(s) con precio a consultar no están incluidos en el total.</p>':'')+'<div class="two"><label>Nombre<input id="cn" autocomplete="name" value="'+esc(who.n||'')+'"></label><label>Clínica / empresa<input id="ce" autocomplete="organization" value="'+esc(who.e||'')+'"></label></div><label>Ciudad<input id="cc" autocomplete="address-level2" value="'+esc(who.c||'')+'"></label><p class="nt">Precios en bolívares a la tasa oficial del BCV'+(PR.fecha?' del '+esc(PR.fecha):'')+'. El monto final se confirma con la tasa oficial del BCV del día del pago.</p><button class="btn btn-wa" type="button" id="csend">Enviar pedido por WhatsApp</button><p class="nt">Al enviar su pedido acepta nuestros <a href="legal.html#terminos" target="_blank">Términos y condiciones</a> y nuestra <a href="legal.html#privacidad" target="_blank">Política de privacidad</a>.</p><button class="clr" type="button" id="cclr">Vaciar pedido</button>';
     $('cclr').onclick=()=>{ cart=[]; save(); sync(); draw(); };
     $('csend').onclick=()=>{
       const n=$('cn').value.trim(), e=$('ce').value.trim(), c=$('cc').value.trim();
