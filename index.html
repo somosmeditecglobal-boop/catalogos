@@ -231,6 +231,35 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
 @keyframes slide{to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion: reduce){ .track{animation:none;flex-wrap:wrap;width:auto} .track [aria-hidden]{display:none} }
 @media (max-width:860px){ .brands .wrap{flex-direction:column;align-items:flex-start;gap:14px} .brands .lbl{max-width:none} .marquee{width:100%} .hero .mosaic{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr)} }
+
+/* buscador de instrumental */
+.finder{background:linear-gradient(135deg,#0E2F52,#0A2540);color:#C9D7E6;padding-block:44px}
+.finder .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:36px;align-items:start}
+.finder .wrap>*{min-width:0}
+.fin input::-webkit-search-cancel-button{display:none}
+.finder h2{color:#fff;font-size:clamp(24px,2.6vw,32px);margin-top:8px}
+.finder .eyebrow{color:#6FD3CE}
+.finder p.sub{margin:10px 0 0;color:#A9BCD1;font-size:15.5px;max-width:46ch}
+.fbox{background:#fff;border-radius:16px;padding:18px;box-shadow:0 20px 40px -18px rgba(0,0,0,.45)}
+.fin{display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:12px;padding:4px 6px 4px 14px;transition:border-color .15s}
+.fin:focus-within{border-color:var(--accent)}
+.fin svg{width:20px;height:20px;color:var(--muted);flex:none}
+.fin input{flex:1;min-width:0;border:0;outline:0;font:500 16px var(--body);color:var(--ink);padding:11px 0;background:transparent}
+.fin button{border:0;background:transparent;color:var(--muted);font:600 13px var(--body);cursor:pointer;padding:8px 10px;border-radius:8px}
+.fhint{font-size:13px;color:var(--muted);margin:10px 2px 0}
+.fhint b{color:var(--ink);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.fres{list-style:none;margin:12px 0 0;padding:0;max-height:360px;overflow:auto;display:grid;gap:8px}
+.fres li{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.fres .nm{flex:1;min-width:0;font-weight:600;color:var(--ink);font-size:14.5px;line-height:1.3}
+.fres .cd{display:block;font-weight:500;color:var(--muted);font-size:12.5px;margin-top:2px}
+.fres .ok{flex:none;font-size:12px;font-weight:700;color:#127A42;background:#E3F5EA;border-radius:999px;padding:4px 10px}
+.fres .q{flex:none;font-size:13px;font-weight:700;color:#fff;background:var(--wa);border-radius:999px;padding:8px 12px;text-decoration:none}
+.fres .q:hover{background:var(--wa-d)}
+.fnone{margin-top:12px;border:1px dashed var(--line);border-radius:12px;padding:14px;color:var(--text);font-size:14.5px}
+.fnone a{display:inline-flex;margin-top:10px}
+.fcount{font-size:12.5px;color:var(--muted);margin:10px 2px 0}
+@media (max-width:860px){ .finder .wrap{grid-template-columns:1fr;gap:20px} .fres .q span{display:none} }
+@media (max-width:560px){ .fres li{flex-wrap:wrap} .fres .nm{flex-basis:100%} }
 </style>
 <script type="application/ld+json">
 {
@@ -292,6 +321,7 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
     <a class="logo" href="#inicio" aria-label="Meditec Global, inicio"><svg style="color:var(--navy)"><use href="#i-mark"/></svg><div><b>MEDITEC</b><small>GLOBAL</small></div></a>
     <nav class="menu" aria-label="Principal">
       <a href="#catalogos">Catálogos</a>
+      <a href="#buscar">Buscar instrumental</a>
       <a href="#lineas">Líneas de producto</a>
       <a href="#nosotros">Por qué elegirnos</a>
       <a href="#contacto">Contacto</a>
@@ -339,6 +369,23 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
     <div class="wrap">
       <div class="lbl"><small>Marcas</small>Trabajamos con marcas líderes</div>
       <div class="marquee"><div class="track"><span>Mindray</span><span>Contec</span><span>Comen</span><span>EDAN</span><span>Riester</span><span>Aesculap</span><span>Midmark</span><span>Dynarex</span><span>Bioland</span><span>Sinohero</span><span>Instramed</span><span>Venttech</span><span>Drive Medical</span><span>Western Medical</span><span aria-hidden="true" style="display:contents"><span>Mindray</span><span>Contec</span><span>Comen</span><span>EDAN</span><span>Riester</span><span>Aesculap</span><span>Midmark</span><span>Dynarex</span><span>Bioland</span><span>Sinohero</span><span>Instramed</span><span>Venttech</span><span>Drive Medical</span><span>Western Medical</span></span></div></div>
+    </div>
+  </section>
+
+  <section class="finder" id="buscar" aria-labelledby="buscar-t">
+    <div class="wrap">
+      <div>
+        <div class="eyebrow">Buscador de instrumental</div>
+        <h2 id="buscar-t">Consulte aquí el instrumental que necesita</h2>
+        <p class="sub">Escriba el nombre de la caja, pinza, tijera o instrumento, o su código. Le indicamos al instante si lo tenemos disponible y puede cotizarlo por WhatsApp.</p>
+      </div>
+      <div class="fbox">
+        <label class="fin" for="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <input id="q" type="search" autocomplete="off" placeholder="Ej.: pinza Kelly, caja de cesárea, tijera Metzenbaum…" aria-describedby="fh">
+          <button type="button" id="qx" hidden>Borrar</button></label>
+        <p class="fhint" id="fh">Pruebe con: <b data-q="caja de cesarea">caja de cesárea</b> · <b data-q="pinza kelly">pinza Kelly</b> · <b data-q="tijera metzenbaum">tijera Metzenbaum</b> · <b data-q="porta agujas">porta agujas</b></p>
+        <div id="fout" aria-live="polite"></div>
+      </div>
     </div>
   </section>
 
@@ -568,6 +615,38 @@ function route(){
 }
 window.addEventListener('hashchange', route);
 route();
+</script>
+<script>
+(function(){
+  const WA='https://wa.me/584128761693?text=';
+  const q=document.getElementById('q'), out=document.getElementById('fout'), qx=document.getElementById('qx');
+  let data=null, loading=null;
+  const norm=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+  const SYN={flebotomia:'flebotomia',febotomia:'flebotomia',cesaria:'cesarea',ginecologia:'ginecologia',genecologia:'ginecologia',portaagujas:'porta agujas',portagujas:'porta agujas',hemostatica:'hemostatica',bisturi:'bisturi',mosquito:'mosquito',kocker:'kocher',koher:'kocher'};
+  function load(){ if(data) return Promise.resolve(data); if(!loading) loading=fetch('catalogos/productos.json').then(r=>r.json()).then(d=>{data=d.map(p=>({...p,k:norm(p.n+' '+p.c)})); return data;}); return loading; }
+  const cap=s=>s.toLowerCase().replace(/(^|[\s(\-\/])([a-záéíóúñ])/g,(m,a,b)=>a+b.toUpperCase()).replace(/\b(De|Del|La|Las|El|Los|Y|Con|Para|Por|En|Sin|A|O)\b/g,w=>w.toLowerCase()).replace(/^./,c=>c.toUpperCase()).replace(/(\d)(cm|mm)\b/gi,'$1 $2');
+  const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function render(term){
+    const t=norm(term); qx.hidden=!term;
+    if(t.length<2){ out.innerHTML=''; return; }
+    const STOP=new Set(['de','del','la','las','el','los','para','con','y','en','a','un','una']); let words=t.split(' ').map(w=>SYN[w]||w).filter(w=>w&&!STOP.has(w)); if(!words.length) words=t.split(' ');
+    const res=data.filter(p=>words.every(w=>p.k.includes(w)));
+    if(!res.length){
+      const msg=encodeURIComponent('Hola Meditec Global, ¿tienen disponible: '+term+'?');
+      out.innerHTML='<div class="fnone">No encontramos <b>“'+esc(term)+'”</b> en nuestra lista. Escríbanos y le confirmamos disponibilidad o una alternativa.<br><a class="btn btn-wa" target="_blank" rel="noopener" href="'+WA+msg+'">Consultar por WhatsApp</a></div>';
+      return;
+    }
+    const top=res.slice(0,25);
+    out.innerHTML='<p class="fcount">'+res.length+(res.length===1?' resultado':' resultados')+(res.length>25?' · mostrando los primeros 25, afine su búsqueda':'')+'</p><ul class="fres">'+top.map(p=>{
+      const nm=cap(p.n); const msg=encodeURIComponent('Hola Meditec Global, quiero cotizar: '+nm+' (cód. '+p.c+').');
+      return '<li><div class="nm">'+esc(nm)+'<span class="cd">Código '+esc(p.c)+'</span></div><span class="ok">✓ Disponible</span><a class="q" target="_blank" rel="noopener" href="'+WA+msg+'">Cotizar<span> por WhatsApp</span></a></li>';
+    }).join('')+'</ul>';
+  }
+  let tmr; q.addEventListener('input',()=>{ clearTimeout(tmr); tmr=setTimeout(()=>load().then(()=>render(q.value)).catch(()=>{out.innerHTML='<div class="fnone">No se pudo cargar el listado. Escríbanos por WhatsApp al 0412-876.16.93.</div>';}),120); });
+  q.addEventListener('focus',()=>{load().catch(()=>{});},{once:true});
+  qx.addEventListener('click',()=>{ q.value=''; render(''); q.focus(); });
+  document.querySelectorAll('.fhint b[data-q]').forEach(b=>b.addEventListener('click',()=>{ q.value=b.dataset.q; load().then(()=>render(q.value)); }));
+})();
 </script>
 </body>
 </html>
