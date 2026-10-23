@@ -304,6 +304,22 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
 .track span{background:#DDF5E8;color:#0A2540;border:1px solid #9FDCBF;box-shadow:0 8px 18px -12px rgba(18,122,66,.45)}
 .track span[aria-hidden]{background:none;border:0;box-shadow:none}
 .brands .lbl{color:var(--navy)}
+
+/* precios en buscador y carrito */
+.fres .pz{flex:none;text-align:right;line-height:1.15}
+.fres .pz b{display:block;font:800 16.5px var(--display);color:var(--navy);white-space:nowrap}
+.fres .pz small{font-size:11px;color:var(--muted);font-weight:600}
+.fres .pz.na{font-size:12.5px;font-weight:700;color:var(--muted);max-width:92px}
+.fres .cd em{font-style:normal;color:#127A42;font-weight:700}
+.fnote{font-size:12px;color:var(--muted);margin:10px 2px 0;line-height:1.45}
+.ci .pr{font-size:13px;color:var(--text);margin-top:3px}
+.ci .lt{font-weight:800;color:var(--navy);font-size:14.5px;align-self:center}
+.cart-f .sum{display:grid;gap:4px;font-size:14px;color:var(--text)}
+.cart-f .sum div{display:flex;justify-content:space-between;gap:10px}
+.cart-f .sum .tt{font:800 19px var(--display);color:var(--navy);border-top:1px solid var(--line);padding-top:7px;margin-top:3px}
+.cart-f .sum .bs{font-size:12.5px;color:var(--muted)}
+.cart-ok .tt{font:800 18px var(--display);color:var(--navy);margin:6px 0}
+@media (max-width:560px){ .fres .pz{text-align:left;margin-right:auto} .cart{overflow:auto} .cart-b{flex:none;overflow:visible} }
 </style>
 <script type="application/ld+json">
 {
@@ -670,11 +686,15 @@ route();
 <script>
 (function(){
   const WA='https://wa.me/584128761693?text=';
+  window.MGP=window.MGP||fetch('catalogos/precios.json',{cache:'no-cache'}).then(r=>r.ok?r.json():{p:{}}).catch(()=>({p:{}}));
+  window.MGnum=x=>{const s=(Math.round(x*100)/100).toFixed(2).split('.');return s[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.')+','+s[1];};
+  window.MGfmt=x=>'$'+MGnum(x);
+  let PR={p:{}};
   const q=document.getElementById('q'), out=document.getElementById('fout'), qx=document.getElementById('qx');
   let data=null, loading=null;
   const norm=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
   const SYN={flebotomia:'flebotomia',febotomia:'flebotomia',cesaria:'cesarea',ginecologia:'ginecologia',genecologia:'ginecologia',portaagujas:'porta agujas',portagujas:'porta agujas',hemostatica:'hemostatica',bisturi:'bisturi',mosquito:'mosquito',kocker:'kocher',koher:'kocher'};
-  function load(){ if(data) return Promise.resolve(data); if(!loading) loading=fetch('catalogos/productos.json').then(r=>r.json()).then(d=>{data=d.map(p=>({...p,k:norm(p.n+' '+p.c)})); return data;}); return loading; }
+  function load(){ if(data) return Promise.resolve(data); if(!loading) loading=Promise.all([fetch('catalogos/productos.json').then(r=>r.json()),window.MGP]).then(([d,pr])=>{PR=pr||{p:{}}; data=d.map(p=>({...p,k:norm(p.n+' '+p.c)})); return data;}); return loading; }
   const cap=s=>s.toLowerCase().replace(/(^|[\s(\-\/])([a-záéíóúñ])/g,(m,a,b)=>a+b.toUpperCase()).replace(/\b(De|Del|La|Las|El|Los|Y|Con|Para|Por|En|Sin|A|O)\b/g,w=>w.toLowerCase()).replace(/^./,c=>c.toUpperCase()).replace(/(\d)(cm|mm)\b/gi,'$1 $2');
   const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   function render(term){
@@ -690,8 +710,9 @@ route();
     const top=res.slice(0,25);
     out.innerHTML='<p class="fcount">'+res.length+(res.length===1?' resultado':' resultados')+(res.length>25?' · mostrando los primeros 25, afine su búsqueda':'')+'</p><ul class="fres">'+top.map(p=>{
       const nm=cap(p.n); const msg=encodeURIComponent('Hola Meditec Global, quiero cotizar: '+nm+' (cód. '+p.c+').');
-      return '<li><div class="nm">'+esc(nm)+'<span class="cd">Código '+esc(p.c)+'</span></div><span class="ok">✓ Disponible</span><button type="button" class="add" data-c="'+esc(p.c)+'" data-n="'+esc(nm)+'">+ Agregar al carrito</button></li>';
-    }).join('')+'</ul>';
+      const v=PR.p&&PR.p[p.c]; const pz=v>0?'<span class="pz"><b>'+MGfmt(v)+'</b><small>+ IVA</small></span>':'<span class="pz na">Precio a consultar</span>';
+      return '<li><div class="nm">'+esc(nm)+'<span class="cd">Código '+esc(p.c)+' · <em>✓ Disponible</em></span></div>'+pz+'<button type="button" class="add" data-c="'+esc(p.c)+'" data-n="'+esc(nm)+'">+ Agregar al carrito</button></li>';
+    }).join('')+'</ul>'+(PR.fecha?'<p class="fnote">Precios en dólares a la tasa oficial BCV del '+esc(PR.fecha)+', sin IVA. Si paga en bolívares, el monto se calcula a la tasa BCV del día del pago.</p>':'');
     if(window.MGsync) MGsync();
   }
   let tmr; q.addEventListener('input',()=>{ clearTimeout(tmr); tmr=setTimeout(()=>load().then(()=>render(q.value)).catch(()=>{out.innerHTML='<div class="fnone">No se pudo cargar el listado. Escríbanos por WhatsApp al 0412-876.16.93.</div>';}),120); });
@@ -707,6 +728,10 @@ route();
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   let cart=[]; try{ cart=JSON.parse(localStorage.getItem(KEY)||'[]')||[]; }catch(e){ cart=[]; }
   let done=null;
+  let PR={p:{}}; const fmt=x=>window.MGfmt?MGfmt(x):'$'+x.toFixed(2);
+  const pv=c=>{const v=PR.p&&PR.p[c]; return v>0?v:0;};
+  function totals(){ const iva=(PR.iva!=null?PR.iva:16); let s=0,na=0; cart.forEach(i=>{const v=pv(i.c); if(v) s+=v*i.q; else na+=i.q;}); s=Math.round(s*100)/100; const iv=Math.round(s*iva)/100; const t=Math.round((s+iv)*100)/100; return {s,iv,t,na,iva,bs:PR.bcv?t*PR.bcv:0}; }
+  (window.MGP||Promise.resolve({p:{}})).then(d=>{ PR=d||{p:{}}; if(!$('cart').hidden) draw(); });
   const save=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(cart)); }catch(e){} };
   const count=()=>cart.reduce((s,i)=>s+i.q,0);
   function sync(){
@@ -724,18 +749,19 @@ route();
   function draw(){
     const b=$('cartb'), f=$('cartf');
     if(done){
-      b.innerHTML='<div class="cart-ok"><span class="badge">✓ Pedido listo</span><h4>Su pedido '+esc(done.id)+'</h4><ol>'+done.items.map(i=>'<li>'+i.q+' × '+esc(i.n)+' <span style="color:var(--muted)">(cód. '+esc(i.c)+')</span></li>').join('')+'</ol><p>Se abrió WhatsApp con su pedido. <b>Pulse “Enviar”</b> en WhatsApp para que nos llegue. Le responderemos con el <b>monto total</b> y la disponibilidad.</p><p>¿No se abrió WhatsApp?</p></div>';
+      b.innerHTML='<div class="cart-ok"><span class="badge">✓ Pedido listo</span><h4>Su pedido '+esc(done.id)+'</h4><ol>'+done.items.map(i=>'<li>'+i.q+' × '+esc(i.n)+' <span style="color:var(--muted)">(cód. '+esc(i.c)+')</span></li>').join('')+'</ol>'+(done.t?'<div class="tt">Total: '+fmt(done.t)+' <small style="font:600 13px var(--body);color:var(--muted)">IVA incluido</small></div>':'')+'<p>Se abrió WhatsApp con su pedido. <b>Pulse “Enviar”</b> en WhatsApp para que nos llegue. Le confirmaremos la disponibilidad y los datos de pago.</p><p>¿No se abrió WhatsApp?</p></div>';
       f.innerHTML='<a class="btn btn-wa" target="_blank" rel="noopener" href="'+done.url+'">Abrir WhatsApp de nuevo</a><button class="clr" type="button" id="cnew">Hacer un pedido nuevo</button>';
       $('cnew').onclick=()=>{ done=null; cart=[]; save(); sync(); draw(); };
       return;
     }
     if(!cart.length){ b.innerHTML='<div class="cart-empty">Su carrito está vacío.<br>Use el buscador para agregar instrumental.</div>'; f.innerHTML='<a class="btn btn-pri" href="#buscar" id="cgo">Ir al buscador</a>'; $('cgo').onclick=close; return; }
-    b.innerHTML=cart.map((i,k)=>'<div class="ci"><div><div class="nm">'+esc(i.n)+'</div><div class="cd">Código '+esc(i.c)+'</div></div><div class="ctl"><button type="button" data-k="'+k+'" data-d="-1" aria-label="Menos">−</button><input inputmode="numeric" aria-label="Cantidad" data-k="'+k+'" value="'+i.q+'"><button type="button" data-k="'+k+'" data-d="1" aria-label="Más">+</button></div><button class="rm" type="button" data-r="'+k+'">Quitar</button></div>').join('');
+    b.innerHTML=cart.map((i,k)=>'<div class="ci"><div><div class="nm">'+esc(i.n)+'</div><div class="cd">Código '+esc(i.c)+'</div><div class="pr">'+(pv(i.c)?fmt(pv(i.c))+' c/u + IVA':'Precio a consultar')+'</div></div><div class="ctl"><button type="button" data-k="'+k+'" data-d="-1" aria-label="Menos">−</button><input inputmode="numeric" aria-label="Cantidad" data-k="'+k+'" value="'+i.q+'"><button type="button" data-k="'+k+'" data-d="1" aria-label="Más">+</button></div><div class="lt">'+(pv(i.c)?fmt(pv(i.c)*i.q):'')+'</div><button class="rm" type="button" data-r="'+k+'">Quitar</button></div>').join('');
     b.querySelectorAll('.ctl button').forEach(x=>x.onclick=()=>{ const i=cart[+x.dataset.k]; i.q=Math.max(1,i.q+(+x.dataset.d)); save(); sync(); draw(); });
     b.querySelectorAll('.ctl input').forEach(x=>x.onchange=()=>{ const v=parseInt(x.value,10); cart[+x.dataset.k].q=v>0?Math.min(v,999):1; save(); sync(); draw(); });
     b.querySelectorAll('.rm').forEach(x=>x.onclick=()=>{ cart.splice(+x.dataset.r,1); save(); sync(); draw(); });
     let who={}; try{ who=JSON.parse(localStorage.getItem(KEY+'_c')||'{}'); }catch(e){}
-    f.innerHTML='<div class="tot"><span>Artículos</span><span>'+count()+'</span></div><div class="two"><label>Nombre<input id="cn" autocomplete="name" value="'+esc(who.n||'')+'"></label><label>Clínica / empresa<input id="ce" autocomplete="organization" value="'+esc(who.e||'')+'"></label></div><label>Ciudad<input id="cc" autocomplete="address-level2" value="'+esc(who.c||'')+'"></label><p class="nt">Le enviaremos por WhatsApp el monto total y la disponibilidad de su pedido.</p><button class="btn btn-wa" type="button" id="csend">Enviar pedido por WhatsApp</button><button class="clr" type="button" id="cclr">Vaciar pedido</button>';
+    const T=totals();
+    f.innerHTML='<div class="sum"><div><span>Artículos</span><span>'+count()+'</span></div><div><span>Subtotal</span><span>'+fmt(T.s)+'</span></div><div><span>IVA ('+T.iva+'%)</span><span>'+fmt(T.iv)+'</span></div><div class="tt"><span>Total</span><span>'+fmt(T.t)+'</span></div>'+(T.bs?'<div class="bs"><span>Equivale a (tasa BCV '+esc(PR.fecha||'')+')</span><span>Bs '+(window.MGnum?MGnum(T.bs):T.bs.toFixed(2))+'</span></div>':'')+'</div>'+(T.na?'<p class="nt">'+T.na+' artículo(s) con precio a consultar no están incluidos en el total.</p>':'')+'<div class="two"><label>Nombre<input id="cn" autocomplete="name" value="'+esc(who.n||'')+'"></label><label>Clínica / empresa<input id="ce" autocomplete="organization" value="'+esc(who.e||'')+'"></label></div><label>Ciudad<input id="cc" autocomplete="address-level2" value="'+esc(who.c||'')+'"></label><p class="nt">Precios en US$ a la tasa oficial BCV'+(PR.fecha?' del '+esc(PR.fecha):'')+'. Si paga en bolívares, se calcula a la tasa BCV del día del pago.</p><button class="btn btn-wa" type="button" id="csend">Enviar pedido por WhatsApp</button><button class="clr" type="button" id="cclr">Vaciar pedido</button>';
     $('cclr').onclick=()=>{ cart=[]; save(); sync(); draw(); };
     $('csend').onclick=()=>{
       const n=$('cn').value.trim(), e=$('ce').value.trim(), c=$('cc').value.trim();
@@ -743,12 +769,15 @@ route();
       const id=orderId();
       const lines=['*Nuevo pedido web – '+id+'*'];
       if(n) lines.push('Nombre: '+n); if(e) lines.push('Clínica/empresa: '+e); if(c) lines.push('Ciudad: '+c);
-      lines.push(''); cart.forEach((i,k)=>lines.push((k+1)+') '+i.q+' × '+i.n+' (cód. '+i.c+')'));
-      lines.push('','Total de artículos: '+count(),'Por favor, envíenme el monto total y la disponibilidad. Gracias.');
+      const T=totals();
+      lines.push(''); cart.forEach((i,k)=>{ const v=pv(i.c); lines.push((k+1)+') '+i.q+' × '+i.n+' (cód. '+i.c+') – '+(v?fmt(v)+' c/u = '+fmt(v*i.q):'precio a consultar')); });
+      lines.push('','Artículos: '+count(),'Subtotal: '+fmt(T.s),'IVA '+T.iva+'%: '+fmt(T.iv),'*TOTAL: '+fmt(T.t)+'*');
+      if(T.na) lines.push('('+T.na+' artículo(s) con precio a consultar)');
+      lines.push('Precios a tasa BCV'+(PR.fecha?' del '+PR.fecha:'')+'.','','Por favor, confírmenme disponibilidad y datos de pago. Gracias.');
       const url='https://wa.me/'+PHONE+'?text='+encodeURIComponent(lines.join('\n'));
-      done={id,items:cart.map(i=>({...i})),url}; draw(); sync();
+      done={id,items:cart.map(i=>({...i})),url,t:T.t}; draw(); sync();
       window.open(url,'_blank','noopener');
-      if(window.gtag) try{ gtag('event','pedido_whatsapp',{items:count()}); }catch(_){}
+      if(window.gtag) try{ gtag('event','pedido_whatsapp',{items:count(),value:T.t,currency:'USD'}); }catch(_){}
     };
   }
   sync();
