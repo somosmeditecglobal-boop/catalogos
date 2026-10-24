@@ -331,11 +331,13 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
 .fres .pz{flex:none;text-align:right;line-height:1.15}
 .fres .pz b{display:block;font:800 16.5px var(--display);color:var(--navy);white-space:nowrap}
 .fres .pz small{font-size:11px;color:var(--muted);font-weight:600}
+.fres .pz small.usd{display:block;font-size:11px;color:var(--muted);font-weight:600;margin:1px 0 2px}
 .fres .pz small.ti{display:block;color:var(--text);font-weight:700;margin-top:1px}
 .fres .pz.na{font-size:12.5px;font-weight:700;color:var(--muted);max-width:92px}
 .fres .cd em{font-style:normal;color:#127A42;font-weight:700}
 .fnote{font-size:12px;color:var(--muted);margin:10px 2px 0;line-height:1.45}
 .ci .pr{font-size:13px;color:var(--text);margin-top:3px}
+.ci .pr .usd{font-size:11px;color:var(--muted)}
 .ci .lt{font-weight:800;color:var(--navy);font-size:14.5px;align-self:center}
 .cart-f .sum{display:grid;gap:4px;font-size:14px;color:var(--text)}
 .cart-f .sum div{display:flex;justify-content:space-between;gap:10px}
@@ -736,6 +738,7 @@ route();
   window.MGP=window.MGP||fetch('catalogos/precios.json',{cache:'no-cache'}).then(r=>r.ok?r.json():{p:{}}).catch(()=>({p:{}}));
   window.MGnum=x=>{const s=(Math.round(x*100)/100).toFixed(2).split('.');return s[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.')+','+s[1];};
   window.MGfmt=x=>'Bs '+MGnum(x);
+  window.MGusd=x=>'Ref. $ '+MGnum(x)+' a tasa BCV';
   window.MGP.then(d=>{ const t=document.getElementById('tasabcv'); if(!t||!d||!(d.bcv>0)) return; const s=d.bcv.toFixed(4).split('.'); t.innerHTML='Dólar BCV'+(d.fecha?' '+d.fecha:'')+': <b>Bs '+s[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.')+','+s[1]+'</b>'; t.title='Tasa oficial del Banco Central de Venezuela usada como referencia para los pagos en bolívares'; t.hidden=false; });
   let PR={p:{}};
   const q=document.getElementById('q'), out=document.getElementById('fout'), qx=document.getElementById('qx');
@@ -758,7 +761,7 @@ route();
     const top=res.slice(0,25);
     out.innerHTML='<p class="fcount">'+res.length+(res.length===1?' resultado':' resultados')+(res.length>25?' · mostrando los primeros 25, afine su búsqueda':'')+'</p><ul class="fres">'+top.map(p=>{
       const nm=cap(p.n); const msg=encodeURIComponent('Hola Meditec Global, quiero cotizar: '+nm+' (cód. '+p.c+').');
-      const v=(PR.p&&PR.p[p.c]>0&&PR.bcv)?Math.round(PR.p[p.c]*PR.bcv*100)/100:0; const pz=v>0?'<span class="pz"><b>'+MGfmt(v)+'</b><small>por unidad + IVA</small><small class="ti">Total con IVA: '+MGfmt(Math.round(v*(100+(PR.iva!=null?PR.iva:16)))/100)+'</small></span>':'<span class="pz na">Precio a consultar</span>';
+      const v=(PR.p&&PR.p[p.c]>0&&PR.bcv)?Math.round(PR.p[p.c]*PR.bcv*100)/100:0; const pz=v>0?'<span class="pz"><b>'+MGfmt(v)+'</b><small class="usd">'+MGusd(PR.p[p.c])+'</small><small>por unidad + IVA</small><small class="ti">Total con IVA: '+MGfmt(Math.round(v*(100+(PR.iva!=null?PR.iva:16)))/100)+'</small></span>':'<span class="pz na">Precio a consultar</span>';
       return '<li><div class="nm">'+esc(nm)+'<span class="cd">Código '+esc(p.c)+' · <em>✓ Disponible</em></span></div>'+pz+'<button type="button" class="add" data-c="'+esc(p.c)+'" data-n="'+esc(nm)+'">+ Agregar al carrito</button></li>';
     }).join('')+'</ul>'+(PR.fecha?'<p class="fnote">Precios por unidad expresados en bolívares, calculados a la tasa oficial del BCV del '+esc(PR.fecha)+', sin IVA. Se actualizan a diario según la tasa oficial del BCV.</p>':'');
     if(window.MGsync) MGsync();
@@ -803,7 +806,7 @@ route();
       return;
     }
     if(!cart.length){ b.innerHTML='<div class="cart-empty">Su carrito está vacío.<br>Use el buscador para agregar instrumental.</div>'; f.innerHTML='<a class="btn btn-pri" href="#buscar" id="cgo">Ir al buscador</a>'; $('cgo').onclick=close; return; }
-    b.innerHTML=cart.map((i,k)=>'<div class="ci"><div><div class="nm">'+esc(i.n)+'</div><div class="cd">Código '+esc(i.c)+'</div><div class="pr">'+(pv(i.c)?fmt(pv(i.c))+' por unidad + IVA · '+fmt(Math.round(pv(i.c)*(100+(PR.iva!=null?PR.iva:16)))/100)+' con IVA':'Precio a consultar')+'</div></div><div class="ctl"><button type="button" data-k="'+k+'" data-d="-1" aria-label="Menos">−</button><input inputmode="numeric" aria-label="Cantidad" data-k="'+k+'" value="'+i.q+'"><button type="button" data-k="'+k+'" data-d="1" aria-label="Más">+</button></div><div class="lt">'+(pv(i.c)?fmt(pv(i.c)*i.q):'')+'</div><button class="rm" type="button" data-r="'+k+'">Quitar</button></div>').join('');
+    b.innerHTML=cart.map((i,k)=>'<div class="ci"><div><div class="nm">'+esc(i.n)+'</div><div class="cd">Código '+esc(i.c)+'</div><div class="pr">'+(pv(i.c)?fmt(pv(i.c))+' <small class="usd">('+(window.MGusd?MGusd(PR.p[i.c]):'')+')</small> por unidad + IVA · '+fmt(Math.round(pv(i.c)*(100+(PR.iva!=null?PR.iva:16)))/100)+' con IVA':'Precio a consultar')+'</div></div><div class="ctl"><button type="button" data-k="'+k+'" data-d="-1" aria-label="Menos">−</button><input inputmode="numeric" aria-label="Cantidad" data-k="'+k+'" value="'+i.q+'"><button type="button" data-k="'+k+'" data-d="1" aria-label="Más">+</button></div><div class="lt">'+(pv(i.c)?fmt(pv(i.c)*i.q):'')+'</div><button class="rm" type="button" data-r="'+k+'">Quitar</button></div>').join('');
     b.querySelectorAll('.ctl button').forEach(x=>x.onclick=()=>{ const i=cart[+x.dataset.k]; i.q=Math.max(1,i.q+(+x.dataset.d)); save(); sync(); draw(); });
     b.querySelectorAll('.ctl input').forEach(x=>x.onchange=()=>{ const v=parseInt(x.value,10); cart[+x.dataset.k].q=v>0?Math.min(v,999):1; save(); sync(); draw(); });
     b.querySelectorAll('.rm').forEach(x=>x.onclick=()=>{ cart.splice(+x.dataset.r,1); save(); sync(); draw(); });
