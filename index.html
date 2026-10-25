@@ -287,6 +287,16 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
 .fres .add{flex:none;font:700 13px var(--body);color:#fff;background:var(--accent);border:0;border-radius:999px;padding:8px 14px;cursor:pointer}
 .fres .add:hover{background:var(--accent-d)}
 .fres .add.in{background:var(--accent-soft);color:var(--accent-d)}
+.eqres li{align-items:flex-start}
+.eqres .ds{display:block;font-weight:400;color:var(--text);font-size:13px;margin-top:4px;line-height:1.4}
+.eqres .op{display:block;font-weight:600;color:var(--muted);font-size:12px;margin-top:4px}
+.eqres .act{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.eqres .na{font:700 12px var(--body);color:var(--muted);background:#F1F4F8;border-radius:999px;padding:4px 10px}
+.eqres .vc{font:600 12.5px var(--body);color:var(--accent-d);text-decoration:underline;text-underline-offset:2px}
+.eqchips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 2px 0}
+.eqchips button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 11px;font:600 12.5px var(--body);color:var(--ink);cursor:pointer}
+.eqchips button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+@media (max-width:560px){ .eqres .act{flex-direction:row;flex-wrap:wrap;flex-basis:100%;justify-content:space-between;align-items:center} }
 .cartbtn{position:fixed;left:max(20px,env(safe-area-inset-left,0px));bottom:max(20px,env(safe-area-inset-bottom,0px));z-index:31;display:flex;align-items:center;gap:8px;background:var(--navy);color:#fff;border:0;border-radius:999px;padding:14px 20px;font:700 15px var(--body);box-shadow:0 10px 24px -6px rgba(0,0,0,.4);cursor:pointer}
 .cartbtn svg{width:20px;height:20px}
 .cartbtn b{background:#6FD3CE;color:var(--navy);border-radius:999px;min-width:24px;height:24px;display:grid;place-items:center;font-size:13px;padding:0 6px}
@@ -413,7 +423,7 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
       <a href="#catalogos">Catálogos</a>
       <a href="#buscar">Compra tu instrumental</a>
       <a href="#lineas">Líneas de producto</a>
-      <a href="#equipos">Consulta tu mobiliario o equipo</a>
+      <a href="#consulta" data-focus="q2">Consulta tu mobiliario o equipo</a>
       <a href="#nosotros">Por qué elegirnos</a>
       <a href="#contacto">Contacto</a>
     </nav>
@@ -534,6 +544,24 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
         <a class="line" href="#equipos/40"><div class="ph"><img src="catalogos/linea-emergencia.webp" alt="Tabla de inmovilización" loading="lazy" width="480" height="360"></div><div class="tx"><h3>Emergencia y rescate</h3><span>6 productos</span><span class="go">Ver productos →</span></div></a>
         <a class="line" href="#equipos/42"><div class="ph"><img src="catalogos/linea-ortopedia.webp" alt="Silla de ruedas" loading="lazy" width="480" height="360"></div><div class="tx"><h3>Ortopedia</h3><span>14 productos</span><span class="go">Ver productos →</span></div></a>
         <a class="line" href="#equipos/44"><div class="ph"><img src="catalogos/linea-gases.webp" alt="Cilindros de oxígeno medicinal" loading="lazy" width="480" height="360"></div><div class="tx"><h3>Gases y cilindros</h3><span>6 productos</span><span class="go">Ver productos →</span></div></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="finder" id="consulta" aria-labelledby="consulta-t">
+    <div class="wrap">
+      <div>
+        <div class="eyebrow">Consulta tu mobiliario o equipo</div>
+        <h2 id="consulta-t">Busque aquí el mobiliario, equipo o insumo que necesita</h2>
+        <p class="sub">Escriba el nombre del producto o la marca: camilla, monitor, tensiómetro, silla de ruedas, guantes… Agregue a su consulta todo lo que necesite y envíela por WhatsApp: le respondemos con precio, disponibilidad y ficha técnica.</p>
+      </div>
+      <div class="fbox">
+        <label class="fin" for="q2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <input id="q2" type="search" autocomplete="off" placeholder="Ej.: camilla, monitor, tensiómetro, Riester…" aria-describedby="fh2">
+          <button type="button" id="qx2" hidden>Borrar</button></label>
+        <div class="eqchips" id="eqchips" aria-label="Filtrar por línea"></div>
+        <p class="fhint" id="fh2">Pruebe con: <b data-q="camilla">camilla</b> · <b data-q="monitor">monitor</b> · <b data-q="tensiometro">tensiómetro</b> · <b data-q="silla de ruedas">silla de ruedas</b></p>
+        <div id="fout2" aria-live="polite"></div>
       </div>
     </div>
   </section>
@@ -773,6 +801,46 @@ route();
 </script>
 <script>
 (function(){
+  const q=document.getElementById('q2'), out=document.getElementById('fout2'), qx=document.getElementById('qx2'), chips=document.getElementById('eqchips');
+  let data=null, loading=null, line='';
+  const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+  const SYN={esfigmomanometro:'tensiometro',ecografo:'ultrasonido',ecosonograma:'ultrasonido',eco:'ultrasonido',guante:'guantes',tapabocas:'cubrebocas',bombona:'cilindro',divanes:'divan'};
+  const STOP=new Set(['de','del','la','las','el','los','para','con','y','en','a','un','una','o']);
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function load(){ if(data) return Promise.resolve(data); if(!loading) loading=fetch('catalogos/equipos.json').then(r=>r.json()).then(d=>{ data=d.map((p,i)=>({...p,c:'EQ'+String(i+1).padStart(3,'0'),kn:norm(p.n),k:norm(p.n+' '+p.d+' '+p.o+' '+p.l+' '+p.s)})); drawChips(); return data; }); return loading; }
+  function drawChips(){
+    const L=[...new Set(data.map(p=>p.l))];
+    chips.innerHTML='<button type="button" data-l="" class="'+(line?'':'on')+'">Todas</button>'+L.map(l=>'<button type="button" data-l="'+esc(l)+'" class="'+(l===line?'on':'')+'">'+esc(l)+'</button>').join('');
+  }
+  function render(term){
+    const t=norm(term||''); qx.hidden=!term;
+    if(t.length<2 && !line){ out.innerHTML=''; return; }
+    let words=t?t.split(' ').map(w=>SYN[w]||w).filter(w=>w&&!STOP.has(w)):[]; if(t&&!words.length) words=t.split(' ');
+    words=words.map(w=>w.length>4&&/[^s]s$/.test(w)?w.slice(0,-1):w).map(w=>w.length>5&&/es$/.test(w)?w.slice(0,-2):w);
+    const sc=p=>words.filter(w=>p.kn.includes(w)).length;
+    const res=data.filter(p=>(!line||p.l===line)&&words.every(w=>p.k.includes(w))).sort((x,y)=>sc(y)-sc(x));
+    if(!res.length){
+      const msg=encodeURIComponent('Hola Meditec Global, ¿tienen disponible: '+(term||line)+'?');
+      out.innerHTML='<div class="fnone">No encontramos <b>“'+esc(term||line)+'”</b> en nuestro catálogo de equipos. Escríbanos y le confirmamos disponibilidad o una alternativa.<br><a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/584128761693?text='+msg+'">Consultar por WhatsApp</a></div>';
+      return;
+    }
+    const top=res.slice(0,30);
+    out.innerHTML='<p class="fcount">'+res.length+(res.length===1?' resultado':' resultados')+(res.length>30?' · mostrando los primeros 30, afine su búsqueda':'')+'</p><ul class="fres eqres">'+top.map(p=>
+      '<li><div class="nm">'+esc(p.n)+'<span class="cd">'+esc(p.l)+(p.s&&p.s!==p.l?' · '+esc(p.s):'')+'</span>'+(p.d?'<span class="ds">'+esc(p.d)+'</span>':'')+(p.o?'<span class="op">Disponible: '+esc(p.o)+'</span>':'')+'</div>'+
+      '<div class="act"><span class="na">Precio a consultar</span><button type="button" class="add" data-c="'+p.c+'" data-n="'+esc(p.n)+'" data-p="'+p.p+'">+ Agregar a la consulta</button><a class="vc" href="#equipos/'+p.p+'">Ver en el catálogo (pág. '+p.p+')</a></div></li>'
+    ).join('')+'</ul>';
+    if(window.MGsync) MGsync();
+  }
+  let tmr; q.addEventListener('input',()=>{ clearTimeout(tmr); tmr=setTimeout(()=>load().then(()=>render(q.value)).catch(()=>{out.innerHTML='<div class="fnone">No se pudo cargar el listado. Escríbanos por WhatsApp al 0412-876.16.93.</div>';}),120); });
+  qx.addEventListener('click',()=>{ q.value=''; render(''); q.focus(); });
+  chips.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; line=b.dataset.l; drawChips(); render(q.value); });
+  document.querySelectorAll('#fh2 b[data-q]').forEach(b=>b.addEventListener('click',()=>{ q.value=b.dataset.q; load().then(()=>render(q.value)); }));
+  document.querySelectorAll('a[data-focus]').forEach(a=>a.addEventListener('click',()=>{ setTimeout(()=>{ const i=document.getElementById(a.dataset.focus); if(i) i.focus({preventScroll:true}); },350); }));
+  const io=new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)){ load().catch(()=>{}); io.disconnect(); } },{rootMargin:'300px'}); io.observe(document.getElementById('consulta'));
+})();
+</script>
+<script>
+(function(){
   const PHONE='584128761693', KEY='mg_pedido';
   const $=id=>document.getElementById(id);
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -786,11 +854,12 @@ route();
   const count=()=>cart.reduce((s,i)=>s+i.q,0);
   function sync(){
     const n=count(); $('cartn').textContent=n; $('cartbtn').hidden=n===0 && !done;
-    document.querySelectorAll('.fres .add').forEach(b=>{ const it=cart.find(i=>i.c===b.dataset.c); b.classList.toggle('in',!!it); b.textContent=it?('✓ En el carrito ('+it.q+')'):'+ Agregar al carrito'; });
+    document.querySelectorAll('.fres .add').forEach(b=>{ const it=cart.find(i=>i.c===b.dataset.c); b.classList.toggle('in',!!it); b.textContent=it?('✓ En el carrito ('+it.q+')'):(/^EQ/.test(b.dataset.c)?'+ Agregar a la consulta':'+ Agregar al carrito'); });
   }
   window.MGsync=sync;
-  function add(c,n){ const it=cart.find(i=>i.c===c); if(it) it.q++; else cart.push({c,n,q:1}); done=null; save(); sync(); }
-  document.addEventListener('click',e=>{ const b=e.target.closest('.fres .add'); if(b){ add(b.dataset.c,b.dataset.n); } });
+  function add(c,n,p){ const it=cart.find(i=>i.c===c); if(it) it.q++; else cart.push(p?{c,n,q:1,p:+p}:{c,n,q:1}); done=null; save(); sync(); }
+  const ref=i=>/^EQ/.test(i.c)?('catálogo de equipos, pág. '+(i.p||'')):('cód. '+i.c);
+  document.addEventListener('click',e=>{ const b=e.target.closest('.fres .add'); if(b){ add(b.dataset.c,b.dataset.n,b.dataset.p); } });
   function open(){ $('cart').hidden=false; $('cartov').hidden=false; draw(); document.body.style.overflow='hidden'; $('cartx').focus(); }
   function close(){ $('cart').hidden=true; $('cartov').hidden=true; document.body.style.overflow=''; }
   $('cartbtn').addEventListener('click',open); $('cartx').addEventListener('click',close); $('cartov').addEventListener('click',close);
@@ -799,13 +868,13 @@ route();
   function draw(){
     const b=$('cartb'), f=$('cartf');
     if(done){
-      b.innerHTML='<div class="cart-ok"><span class="badge">✓ Pedido listo</span><h4>Su pedido '+esc(done.id)+'</h4><ol>'+done.items.map(i=>'<li>'+i.q+' × '+esc(i.n)+' <span style="color:var(--muted)">(cód. '+esc(i.c)+')</span></li>').join('')+'</ol>'+(done.t?'<div class="tt">Total: '+fmt(done.t)+' <small style="font:600 13px var(--body);color:var(--muted)">IVA incluido</small></div>':'')+'<p>Se abrió WhatsApp con su pedido. <b>Pulse “Enviar”</b> en WhatsApp para que nos llegue. Le confirmaremos la disponibilidad y los datos de pago.</p><p>¿No se abrió WhatsApp?</p></div>';
+      b.innerHTML='<div class="cart-ok"><span class="badge">✓ Pedido listo</span><h4>Su pedido '+esc(done.id)+'</h4><ol>'+done.items.map(i=>'<li>'+i.q+' × '+esc(i.n)+' <span style="color:var(--muted)">('+esc(ref(i))+')</span></li>').join('')+'</ol>'+(done.t?'<div class="tt">Total: '+fmt(done.t)+' <small style="font:600 13px var(--body);color:var(--muted)">IVA incluido</small></div>':'')+'<p>Se abrió WhatsApp con su pedido. <b>Pulse “Enviar”</b> en WhatsApp para que nos llegue. Le confirmaremos la disponibilidad y los datos de pago.</p><p>¿No se abrió WhatsApp?</p></div>';
       f.innerHTML='<a class="btn btn-wa" target="_blank" rel="noopener" href="'+done.url+'">Abrir WhatsApp de nuevo</a><button class="clr" type="button" id="cnew">Hacer un pedido nuevo</button>';
       $('cnew').onclick=()=>{ done=null; cart=[]; save(); sync(); draw(); };
       return;
     }
-    if(!cart.length){ b.innerHTML='<div class="cart-empty">Su carrito está vacío.<br>Use el buscador para agregar instrumental.</div>'; f.innerHTML='<a class="btn btn-pri" href="#buscar" id="cgo">Ir al buscador</a>'; $('cgo').onclick=close; return; }
-    b.innerHTML=cart.map((i,k)=>'<div class="ci"><div><div class="nm">'+esc(i.n)+'</div><div class="cd">Código '+esc(i.c)+'</div><div class="pr">'+(pv(i.c)?fmt(pv(i.c))+' <small class="usd">('+(window.MGusd?MGusd(PR.p[i.c]):'')+')</small> por unidad + IVA · '+fmt(Math.round(pv(i.c)*(100+(PR.iva!=null?PR.iva:16)))/100)+' con IVA':'Precio a consultar')+'</div></div><div class="ctl"><button type="button" data-k="'+k+'" data-d="-1" aria-label="Menos">−</button><input inputmode="numeric" aria-label="Cantidad" data-k="'+k+'" value="'+i.q+'"><button type="button" data-k="'+k+'" data-d="1" aria-label="Más">+</button></div><div class="lt">'+(pv(i.c)?fmt(pv(i.c)*i.q):'')+'</div><button class="rm" type="button" data-r="'+k+'">Quitar</button></div>').join('');
+    if(!cart.length){ b.innerHTML='<div class="cart-empty">Su carrito está vacío.<br>Use los buscadores para agregar instrumental, mobiliario o equipos.</div>'; f.innerHTML='<a class="btn btn-pri" href="#buscar" id="cgo">Ir al buscador</a>'; $('cgo').onclick=close; return; }
+    b.innerHTML=cart.map((i,k)=>'<div class="ci"><div><div class="nm">'+esc(i.n)+'</div><div class="cd">'+(/^EQ/.test(i.c)?'Mobiliario / equipo · pág. '+esc(i.p||'')+' del catálogo':'Código '+esc(i.c))+'</div><div class="pr">'+(pv(i.c)?fmt(pv(i.c))+' <small class="usd">('+(window.MGusd?MGusd(PR.p[i.c]):'')+')</small> por unidad + IVA · '+fmt(Math.round(pv(i.c)*(100+(PR.iva!=null?PR.iva:16)))/100)+' con IVA':'Precio a consultar')+'</div></div><div class="ctl"><button type="button" data-k="'+k+'" data-d="-1" aria-label="Menos">−</button><input inputmode="numeric" aria-label="Cantidad" data-k="'+k+'" value="'+i.q+'"><button type="button" data-k="'+k+'" data-d="1" aria-label="Más">+</button></div><div class="lt">'+(pv(i.c)?fmt(pv(i.c)*i.q):'')+'</div><button class="rm" type="button" data-r="'+k+'">Quitar</button></div>').join('');
     b.querySelectorAll('.ctl button').forEach(x=>x.onclick=()=>{ const i=cart[+x.dataset.k]; i.q=Math.max(1,i.q+(+x.dataset.d)); save(); sync(); draw(); });
     b.querySelectorAll('.ctl input').forEach(x=>x.onchange=()=>{ const v=parseInt(x.value,10); cart[+x.dataset.k].q=v>0?Math.min(v,999):1; save(); sync(); draw(); });
     b.querySelectorAll('.rm').forEach(x=>x.onclick=()=>{ cart.splice(+x.dataset.r,1); save(); sync(); draw(); });
@@ -820,7 +889,7 @@ route();
       const lines=['*Nuevo pedido web – '+id+'*'];
       if(n) lines.push('Nombre: '+n); if(e) lines.push('Clínica/empresa: '+e); if(c) lines.push('Ciudad: '+c);
       const T=totals();
-      lines.push(''); cart.forEach((i,k)=>{ const v=pv(i.c); lines.push((k+1)+') '+i.q+' × '+i.n+' (cód. '+i.c+') – '+(v?fmt(v)+' por unidad = '+fmt(v*i.q):'precio a consultar')); });
+      lines.push(''); cart.forEach((i,k)=>{ const v=pv(i.c); lines.push((k+1)+') '+i.q+' × '+i.n+' ('+ref(i)+') – '+(v?fmt(v)+' por unidad = '+fmt(v*i.q):'precio a consultar')); });
       lines.push('','Artículos: '+count(),'Subtotal: '+fmt(T.s),'IVA '+T.iva+'%: '+fmt(T.iv),'*TOTAL: '+fmt(T.t)+'*');
       if(T.na) lines.push('('+T.na+' artículo(s) con precio a consultar)');
       lines.push('Precios en bolívares a la tasa oficial del BCV'+(PR.fecha?' del '+PR.fecha:'')+'.','','Por favor, confírmenme disponibilidad y datos de pago. Gracias.');
