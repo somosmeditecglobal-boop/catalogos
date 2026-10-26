@@ -422,6 +422,18 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
 @media (max-width:860px){ .oferta{padding-block:36px} .oferta .wrap{grid-template-columns:1fr;gap:24px} .ofr-img{max-width:420px;margin:0 auto;width:100%} }
 @media (max-width:560px){ .ofr-tag{font-size:16px;padding:12px 16px} .ofr-head{margin-bottom:0} .ofr-list li{font-size:15.5px} .ofr-precio{min-width:0;width:100%} .ofr-btns.fres .add,.ofr-btns .btn{flex:1 1 100%} }
 @media (prefers-reduced-motion: reduce){ .ofr-tag{animation:none} }
+
+/* Oferta: movimiento que invita al clic */
+.ofr-img{display:block;text-decoration:none;animation:ofrfloat 4.5s ease-in-out infinite;transition:transform .25s}
+.ofr-img:hover{animation-play-state:paused;transform:scale(1.03) rotate(-.6deg)}
+@keyframes ofrfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.ofr-shine{position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.55) 45%,transparent 60%);transform:translateX(-120%);animation:ofrshine 3.8s ease-in-out infinite}
+@keyframes ofrshine{0%,55%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
+.ofr-cta{position:absolute;right:14px;top:14px;background:#FFC531;color:#0A2540;font:800 15px/1 var(--display);padding:11px 18px;border-radius:999px;white-space:nowrap;box-shadow:0 8px 18px -6px rgba(0,0,0,.45);animation:ofrbounce 1.6s ease-in-out infinite}
+@keyframes ofrbounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.ofr-btns.fres .add{animation:ofrshake 4s ease-in-out infinite}
+@keyframes ofrshake{0%,82%,100%{transform:none}85%{transform:rotate(-4deg) scale(1.06)}88%{transform:rotate(4deg) scale(1.06)}91%{transform:rotate(-3deg) scale(1.04)}94%{transform:rotate(2deg)}}
+@media (prefers-reduced-motion: reduce){ .ofr-img,.ofr-shine,.ofr-cta,.ofr-btns.fres .add{animation:none} .ofr-shine{display:none} }
 </style>
 <script type="application/ld+json">
 {
@@ -528,7 +540,7 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
   <section class="oferta" id="oferta" aria-labelledby="oferta-t">
     <div class="wrap">
       <div class="ofr-head"><span class="ofr-tag"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.9L22 9.7l-5.4 4.7L18.2 22 12 18.3 5.8 22l1.6-7.6L2 9.7l7.1-.8z"/></svg>Oferta de la semana</span></div>
-      <div class="ofr-img"><img src="catalogos/oferta-semana.jpg" alt="Tijera de episiotomía de 14 cm de acero inoxidable alemán, oferta de la semana de Meditec Global" width="864" height="1080" loading="lazy"></div>
+      <a class="ofr-img" id="ofr-img" href="https://wa.me/584128761693?text=Hola%20Meditec%20Global%2C%20quiero%20la%20oferta%20de%20la%20semana%3A%20Tijera%20de%20episiotom%C3%ADa%2014%20cm%20(c%C3%B3d.%20110040)." target="_blank" rel="noopener" aria-label="Pedir la oferta de la semana por WhatsApp"><img src="catalogos/oferta-semana.jpg" alt="Tijera de episiotomía de 14 cm de acero inoxidable alemán, oferta de la semana de Meditec Global" width="864" height="1080" loading="lazy"><span class="ofr-shine" aria-hidden="true"></span><span class="ofr-cta">👆 Toca para pedir</span></a>
       <div>
         <h2 id="oferta-t">Tijera de episiotomía de 14 cm</h2>
         <div class="ofr-cod">Código 110040 · Instrumental quirúrgico · ✓ Disponible</div>
@@ -1012,7 +1024,7 @@ window.addEventListener('resize',()=>{if(innerWidth>860)set(false);});})();
   document.getElementById('ofr-usd').textContent=window.MGusd?MGusd(u):'';
   if(d.fecha) document.getElementById('ofr-nota').textContent='Precio en bolívares a la tasa oficial del BCV del '+d.fecha+'.';
   document.getElementById('ofr-precio').hidden=false; }); })();
-document.getElementById('ofr-wa').addEventListener('click',()=>{ if(window.gtag) try{ gtag('event','oferta_semana_whatsapp'); }catch(_){} });
+['ofr-wa','ofr-img'].forEach(id=>document.getElementById(id).addEventListener('click',()=>{ if(window.gtag) try{ gtag('event','oferta_semana_whatsapp',{origen:id}); }catch(_){} }));
 </script>
 </body>
 </html>
