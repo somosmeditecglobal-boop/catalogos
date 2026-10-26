@@ -83,7 +83,8 @@ footer .hours b{color:#fff;font-weight:600}
 .menu a{text-decoration:none;font-weight:600;font-size:15px;color:var(--text)}
 .menu a:hover{color:var(--accent)}
 .menu a{white-space:nowrap}
-@media (max-width:1420px){ .menu{gap:16px} .menu a{font-size:14px} .nav .wrap{gap:20px} }
+/* El menú usa siempre este tamaño: con 15px no cabía y el botón de WhatsApp se salía por la derecha */
+.menu{gap:16px} .menu a{font-size:14px} .nav .wrap{gap:20px}
 @media (max-width:1300px){ .nav .btn span{display:none} .nav .btn{padding:12px} }
 @media (max-width:1180px){ .menu a[href="#nosotros"]{display:none} }
 @media (max-width:1040px){ .menu a[href="#contacto"]{display:none} }
@@ -355,6 +356,34 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
 .cart-f .sum .bs{font-size:12.5px;color:var(--muted)}
 .cart-ok .tt{font:800 18px var(--display);color:var(--navy);margin:6px 0}
 @media (max-width:560px){ .fres .pz{text-align:left;margin-right:auto} .cart{overflow:auto} .cart-b{flex:none;overflow:visible} }
+
+/* ===== Versión para teléfonos (no afecta a computadora: todo está dentro de @media o oculto en escritorio) ===== */
+.mtoggle{display:none}
+@media (max-width:860px){
+  .nav{position:sticky}
+  .mtoggle{display:inline-flex;align-items:center;justify-content:center;flex:none;width:46px;height:46px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--navy);cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent}
+  .mtoggle svg{width:22px;height:22px;display:block}
+  .mtoggle .x{display:none}
+  .nav.open .mtoggle .x{display:block}.nav.open .mtoggle .b{display:none}
+  .nav.open .menu{display:flex;flex-direction:column;gap:0;margin:0;position:absolute;left:0;right:0;top:100%;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 18px 30px -12px rgba(10,37,64,.25);padding:6px max(16px,env(safe-area-inset-left,0px)) 14px;max-height:calc(100vh - 80px);max-height:calc(100dvh - 80px);overflow:auto;overscroll-behavior:contain}
+  .nav.open .menu a{display:block!important;padding:15px 6px;font-size:16px;border-bottom:1px solid var(--line)}
+  .nav.open .menu a:last-child{border-bottom:0}
+}
+@media (max-width:560px){
+  .topbar{font-size:12.5px}
+  .topbar .wrap{padding-block:6px;gap:6px 12px;align-items:center}
+  .topbar .group{gap:6px 12px}
+  .topbar .group:first-child>span:first-child{display:none}
+  .topbar .group:last-child a[href*="instagram"]{display:none}
+  .nav .wrap{height:64px;gap:10px}
+  .logo svg{width:30px;height:30px}
+  .logo b{font-size:16px}
+  .nav .btn{width:46px;height:46px;padding:0}
+  .fab{width:50px;height:50px}
+  .fhint b[data-q]{display:inline-block;padding:5px 0}
+  footer a{display:inline-block;padding-block:4px}
+  .legal-links a{display:inline-block;padding-block:6px}
+}
 </style>
 <script type="application/ld+json">
 {
@@ -419,7 +448,7 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
 <header class="nav">
   <div class="wrap">
     <a class="logo" href="#inicio" aria-label="Meditec Global, inicio"><svg style="color:var(--navy)"><use href="#i-mark"/></svg><div><b>MEDITEC</b><small>GLOBAL</small></div></a>
-    <nav class="menu" aria-label="Principal">
+    <nav class="menu" id="menu-principal" aria-label="Principal">
       <a href="#catalogos">Catálogos</a>
       <a href="#buscar">Compra tu instrumental</a>
       <a href="#lineas">Líneas de producto</a>
@@ -428,6 +457,7 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
       <a href="#contacto">Contacto</a>
     </nav>
     <a class="btn btn-wa" href="https://wa.me/584128761693?text=Hola%20Meditec%20Global%2C%20quiero%20una%20cotizaci%C3%B3n." target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg><span>Cotizar por WhatsApp</span></a>
+    <button class="mtoggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-principal"><svg class="b" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
 </header>
 
@@ -766,7 +796,7 @@ route();
   window.MGnum=x=>{const s=(Math.round(x*100)/100).toFixed(2).split('.');return s[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.')+','+s[1];};
   window.MGfmt=x=>'Bs '+MGnum(x);
   window.MGusd=x=>'Ref. $ '+MGnum(x)+' a tasa BCV';
-  window.MGP.then(d=>{ const t=document.getElementById('tasabcv'); if(!t||!d||!(d.bcv>0)) return; const s=d.bcv.toFixed(4).split('.'); t.innerHTML='Dólar BCV'+(d.fecha?' '+d.fecha:'')+': <b>Bs '+s[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.')+','+s[1]+'</b>'; t.title='Tasa oficial del Banco Central de Venezuela usada como referencia para los pagos en bolívares'; t.hidden=false; });
+  window.MGP.then(d=>{ const t=document.getElementById('tasabcv'); if(!t||!d||!(d.bcv>0)) return; const s=d.bcv.toFixed(2).split('.'); t.innerHTML='Dólar BCV'+(d.fecha?' '+d.fecha:'')+': <b>Bs '+s[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.')+','+s[1]+'</b>'; t.title='Tasa oficial del Banco Central de Venezuela usada como referencia para los pagos en bolívares'; t.hidden=false; });
   let PR={p:{}};
   const q=document.getElementById('q'), out=document.getElementById('fout'), qx=document.getElementById('qx');
   let data=null, loading=null;
@@ -901,6 +931,16 @@ route();
   }
   sync();
 })();
+</script>
+<script>
+/* Menú de teléfono: abre/cierra la lista de secciones */
+(function(){const n=document.querySelector('.nav'),b=n&&n.querySelector('.mtoggle');if(!b)return;
+const set=o=>{n.classList.toggle('open',o);b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Cerrar menú':'Abrir menú');};
+b.addEventListener('click',()=>set(!n.classList.contains('open')));
+n.querySelectorAll('.menu a').forEach(a=>a.addEventListener('click',()=>set(false)));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')set(false);});
+document.addEventListener('click',e=>{if(n.classList.contains('open')&&!n.contains(e.target))set(false);});
+window.addEventListener('resize',()=>{if(innerWidth>860)set(false);});})();
 </script>
 </body>
 </html>
