@@ -762,7 +762,7 @@ route();
 <script>
 (function(){
   const WA='https://wa.me/584128761693?text=';
-  window.MGP=window.MGP||fetch('catalogos/precios.json',{cache:'no-cache'}).then(r=>r.ok?r.json():{p:{}}).catch(()=>({p:{}}));
+  window.MGP=window.MGP||fetch('catalogos/precios.json',{cache:'no-cache'}).then(r=>r.ok?r.json():{p:{}}).then(d=>{/* Precio en Bs = base USD x tasa Binance x (1 + recargo). Referencia en $ = Bs / tasa BCV. */if(d&&d.usd&&d.binance>0&&d.bcv>0){const k=d.binance*(1+(+d.recargo||0)/100);d.p={};for(const c in d.usd){const u=+d.usd[c];d.p[c]=u>0?(Math.round(u*k*100)/100)/d.bcv:0;}}return d;}).catch(()=>({p:{}}));
   window.MGnum=x=>{const s=(Math.round(x*100)/100).toFixed(2).split('.');return s[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.')+','+s[1];};
   window.MGfmt=x=>'Bs '+MGnum(x);
   window.MGusd=x=>'Ref. $ '+MGnum(x)+' a tasa BCV';
