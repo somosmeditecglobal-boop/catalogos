@@ -389,11 +389,39 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
 @media (max-width:860px){
   #home{display:flex;flex-direction:column}
   #home>*{order:20}
-  #home>#inicio{order:1} #home>#buscar{order:2} #home>#consulta{order:3} #home>.stats{order:4}
-  #home>.brands{order:5} #home>#catalogos{order:6} #home>#lineas{order:7} #home>#cotizar{order:8} #home>#nosotros{order:9}
+  #home>#inicio{order:1} #home>#oferta{order:2} #home>#buscar{order:3} #home>#consulta{order:4} #home>.stats{order:5}
+  #home>.brands{order:6} #home>#catalogos{order:7} #home>#lineas{order:8} #home>#cotizar{order:9} #home>#nosotros{order:10}
   #home>#buscar{padding-bottom:28px} #home>#consulta{padding-top:28px;border-top:1px solid rgba(255,255,255,.08)}
 }
 @media (max-width:560px){ .finder .eyebrow{font-size:16px} .hero .covers{display:none} }
+
+/* ===== Oferta de la semana ===== */
+.oferta{position:relative;overflow:hidden;background:radial-gradient(1200px 500px at 85% -10%,rgba(111,211,206,.35),transparent 60%),linear-gradient(135deg,#0A2540 0%,#0F3D5E 55%,#167F7D 100%);color:#DCE8F2;padding-block:56px}
+.oferta .wrap{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:48px;align-items:center}
+.ofr-img{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 24px 48px -18px rgba(0,0,0,.55);background:#fff;aspect-ratio:864/1080}
+.ofr-img img{width:100%;height:100%;object-fit:cover}
+.ofr-tag{display:inline-flex;align-items:center;gap:10px;background:#FFC531;color:#0A2540;font:800 20px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;padding:11px 18px;border-radius:999px;box-shadow:0 0 0 0 rgba(255,197,49,.6);animation:ofrpulse 2.2s infinite}
+.ofr-tag svg{width:18px;height:18px}
+@keyframes ofrpulse{0%{box-shadow:0 0 0 0 rgba(255,197,49,.55)}70%{box-shadow:0 0 0 14px rgba(255,197,49,0)}100%{box-shadow:0 0 0 0 rgba(255,197,49,0)}}
+.oferta h2{color:#fff;font-size:clamp(28px,4vw,44px);margin:0 0 6px}
+.ofr-head{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;justify-content:center;text-align:center;margin-bottom:-12px}
+.ofr-sub{font-size:14px;color:#9FC3D6;font-weight:600}
+.ofr-cod{font-size:14px;color:#9FC3D6;font-weight:600}
+.ofr-list{list-style:none;padding:0;margin:20px 0;display:grid;gap:10px}
+.ofr-list li{display:flex;gap:10px;align-items:center;font-size:17px;color:#fff;font-weight:600}
+.ofr-list li span{flex:none;width:24px;height:24px;border-radius:50%;background:rgba(111,211,206,.2);color:#6FD3CE;display:grid;place-items:center;font-size:14px}
+.ofr-precio{display:inline-flex;flex-direction:column;gap:2px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:14px 18px;margin-bottom:20px;min-width:260px}
+.ofr-precio small{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#9FC3D6;font-weight:700}
+.ofr-precio b{font:800 30px/1.1 var(--display);color:#fff}
+.ofr-precio em{font-style:normal;font-size:14px;color:#DCE8F2}
+.ofr-btns.fres{display:flex;flex-wrap:wrap;gap:12px;max-height:none;overflow:visible;margin:0}
+.ofr-btns.fres .add{font:700 16px/1 var(--body);padding:15px 24px;background:#FFC531;color:#0A2540}
+.ofr-btns.fres .add:hover{background:#FFD45E}
+.ofr-btns.fres .add.in{background:#E8F7F6;color:#167F7D}
+.ofr-nota{font-size:13px;color:#9FC3D6;margin:14px 0 0}
+@media (max-width:860px){ .oferta{padding-block:36px} .oferta .wrap{grid-template-columns:1fr;gap:24px} .ofr-img{max-width:420px;margin:0 auto;width:100%} }
+@media (max-width:560px){ .ofr-tag{font-size:16px;padding:12px 16px} .ofr-head{margin-bottom:0} .ofr-list li{font-size:15.5px} .ofr-precio{min-width:0;width:100%} .ofr-btns.fres .add,.ofr-btns .btn{flex:1 1 100%} }
+@media (prefers-reduced-motion: reduce){ .ofr-tag{animation:none} }
 </style>
 <script type="application/ld+json">
 {
@@ -493,6 +521,29 @@ section.block.alt{background-color:#ECF3F7;background-image:url("data:image/svg+
       <div class="covers">
         <a href="#instrumental" aria-label="Abrir catálogo de instrumental quirúrgico"><img src="catalogos/portada-instrumental.jpg" alt="Portada del catálogo de instrumental quirúrgico fabricado con acero inoxidable alemán 2026" width="612" height="792"></a>
         <a href="#equipos" aria-label="Abrir catálogo de equipamiento médico"><img src="catalogos/portada-equipos.jpg" alt="Portada del catálogo de equipamiento médico y hospitalario 2026" width="612" height="792"></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="oferta" id="oferta" aria-labelledby="oferta-t">
+    <div class="wrap">
+      <div class="ofr-head"><span class="ofr-tag"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.9L22 9.7l-5.4 4.7L18.2 22 12 18.3 5.8 22l1.6-7.6L2 9.7l7.1-.8z"/></svg>Oferta de la semana</span></div>
+      <div class="ofr-img"><img src="catalogos/oferta-semana.jpg" alt="Tijera de episiotomía de 14 cm de acero inoxidable alemán, oferta de la semana de Meditec Global" width="864" height="1080" loading="lazy"></div>
+      <div>
+        <h2 id="oferta-t">Tijera de episiotomía de 14 cm</h2>
+        <div class="ofr-cod">Código 110040 · Instrumental quirúrgico · ✓ Disponible</div>
+        <ul class="ofr-list">
+          <li><span>✓</span>Acero inoxidable alemán</li>
+          <li><span>✓</span>Hojas de corte fino y uniforme</li>
+          <li><span>✓</span>5 años de garantía</li>
+          <li><span>✓</span>Entrega inmediata y envíos a todo el país</li>
+        </ul>
+        <div class="ofr-precio" id="ofr-precio" hidden><small>Precio por unidad</small><b id="ofr-bs"></b><em id="ofr-iva"></em><em id="ofr-usd"></em></div>
+        <div class="ofr-btns fres">
+          <button type="button" class="add" data-c="110040" data-n="TIJERA DE EPISIOTOMO 14CM">+ Agregar al pedido</button>
+          <a class="btn btn-wa" id="ofr-wa" href="https://wa.me/584128761693?text=Hola%20Meditec%20Global%2C%20quiero%20la%20oferta%20de%20la%20semana%3A%20Tijera%20de%20episiotom%C3%ADa%2014%20cm%20(c%C3%B3d.%20110040)." target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Pedir por WhatsApp</a>
+        </div>
+        <p class="ofr-nota" id="ofr-nota">Precio en bolívares a la tasa oficial del BCV del día.</p>
       </div>
     </div>
   </section>
@@ -951,6 +1002,17 @@ n.querySelectorAll('.menu a').forEach(a=>a.addEventListener('click',()=>set(fals
 document.addEventListener('keydown',e=>{if(e.key==='Escape')set(false);});
 document.addEventListener('click',e=>{if(n.classList.contains('open')&&!n.contains(e.target))set(false);});
 window.addEventListener('resize',()=>{if(innerWidth>860)set(false);});})();
+</script>
+<script>
+/* Oferta de la semana: precio en vivo desde precios.json */
+(function(){ if(!window.MGP) return; window.MGP.then(d=>{ const c='110040', u=d&&d.p&&d.p[c]; if(!(u>0)||!(d.bcv>0)) return;
+  const bs=Math.round(u*d.bcv*100)/100, iva=(d.iva!=null?d.iva:16), tot=Math.round(bs*(100+iva))/100;
+  document.getElementById('ofr-bs').textContent=window.MGfmt?MGfmt(bs):'Bs '+bs.toFixed(2);
+  document.getElementById('ofr-iva').textContent='+ IVA · Total con IVA: '+(window.MGfmt?MGfmt(tot):'Bs '+tot.toFixed(2));
+  document.getElementById('ofr-usd').textContent=window.MGusd?MGusd(u):'';
+  if(d.fecha) document.getElementById('ofr-nota').textContent='Precio en bolívares a la tasa oficial del BCV del '+d.fecha+'.';
+  document.getElementById('ofr-precio').hidden=false; }); })();
+document.getElementById('ofr-wa').addEventListener('click',()=>{ if(window.gtag) try{ gtag('event','oferta_semana_whatsapp'); }catch(_){} });
 </script>
 </body>
 </html>
