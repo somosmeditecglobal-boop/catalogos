@@ -5,6 +5,9 @@
 <!-- Google Analytics (contador de visitas) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-43SXHTPME7"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-43SXHTPME7');</script>
+<!-- Meta Pixel (anuncios de Facebook e Instagram) -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','4468957959988901');fbq('track','PageView');
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href*="wa.me"]');if(a&&window.fbq)try{fbq('track','Contact');}catch(_){}},true);</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Meditec Global | Instrumental quirúrgico fabricado con acero inoxidable alemán y equipos médicos en Caracas</title>
 <meta name="description" content="Meditec Global, C.A.: instrumental quirúrgico fabricado con acero inoxidable alemán y equipos médicos y hospitalarios en Caracas, Venezuela. Catálogos 2026 con 595 instrumentos, cajas quirúrgicas y 168 equipos. Cotiza por WhatsApp 0412-876.16.93.">
@@ -960,7 +963,7 @@ route();
     document.querySelectorAll('.fres .add').forEach(b=>{ const it=cart.find(i=>i.c===b.dataset.c); b.classList.toggle('in',!!it); b.textContent=it?('✓ En el carrito ('+it.q+')'):(/^EQ/.test(b.dataset.c)?'+ Agregar a la consulta':'+ Agregar al carrito'); });
   }
   window.MGsync=sync;
-  function add(c,n,p){ const it=cart.find(i=>i.c===c); if(it) it.q++; else cart.push(p?{c,n,q:1,p:+p}:{c,n,q:1}); done=null; save(); sync(); }
+  function add(c,n,p){ const it=cart.find(i=>i.c===c); if(it) it.q++; else cart.push(p?{c,n,q:1,p:+p}:{c,n,q:1}); done=null; save(); sync(); if(window.fbq) try{ fbq('track','AddToCart',{content_ids:[c],content_name:n,content_type:'product'}); }catch(_){} }
   const ref=i=>/^EQ/.test(i.c)?('catálogo de equipos, pág. '+(i.p||'')):('cód. '+i.c);
   document.addEventListener('click',e=>{ const b=e.target.closest('.fres .add'); if(b){ add(b.dataset.c,b.dataset.n,b.dataset.p); } });
   function open(){ $('cart').hidden=false; $('cartov').hidden=false; draw(); document.body.style.overflow='hidden'; $('cartx').focus(); }
@@ -1000,6 +1003,7 @@ route();
       done={id,items:cart.map(i=>({...i})),url,t:T.t}; draw(); sync();
       window.open(url,'_blank','noopener');
       if(window.gtag) try{ gtag('event','pedido_whatsapp',{items:count(),value:T.t,currency:'VES'}); }catch(_){}
+      if(window.fbq) try{ fbq('track','Lead',{content_ids:cart.map(i=>i.c),num_items:count(),value:Math.round(T.t*100)/100,currency:'VES'}); }catch(_){}
     };
   }
   sync();
